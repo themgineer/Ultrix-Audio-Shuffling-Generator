@@ -24,6 +24,8 @@ Source 1 CH03
 Source 1 CH04
 Source 1 CH05
 ...
+...
+...
 Source 4 CH11
 Source 4 CH12
 Source 4 CH13
@@ -33,13 +35,14 @@ Source 4 CH16
 ```
 
 ### *CSV Input*
-Input File:
+Input File[^csvnote]:
 ```
 Source 1, Ultrix.slot1.in[1]
 Source 2, Ultrix.slot1.in[1]
 Source 3, Ultrix.slot1.in[1]
 Source 4, Ultrix.slot1.in[1]
 ```
+
 Output File:
 ```
 Name,Description,Video,Audio 1,Audio 2,Audio 3,Audio 4,Audio 5,Audio 6,Audio 7,Audio 8,Audio 9,Audio 10,Audio 11,Audio 12,Audio 13,Audio 14,Audio 15,Audio 16
@@ -73,3 +76,5 @@ optional arguments:
   -o OUTPUT, --output OUTPUT
                         Path or filename of output CSV file.
 ```
+
+[^csvnote]: Notice that the Ultrix input does NOT include the sdi or audio level information in the csv (.sdi.ch1 or .audio.ch1). This is done to maintain consistency and simplicity. The script only needs to know what input to use.
