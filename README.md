@@ -1,13 +1,14 @@
-# **Audio Breakaway Labels**
+# **Audio Breakaway Labels for Ultrix Database**
 This is a short, simple script that will take a list of source names and output a CSV of the audio breakouts.
 
-One thing to keep in mind is that this will overwrite any output files that already exist if you use the generic
-file name or do not specify a unique output filename.
+One thing to keep in mind is that this will overwrite any output file called `shuffled_audio.csv` that already exists if you do not specify a unique output filename or have the script use the default output file.
 
 ## **Input Data Structure**
 Data can be input into the script through a txt file or a csv. Follow the below structures to ensure consistent output.
 
 ### *List Input*
+If you have a list of outputs, you can just put each name or label on a new line in a standard text file. The script will then output a list of those labels with the number of audio channels you specified.
+
 Input File:
 ``` 
 Source 1
@@ -35,7 +36,9 @@ Source 4 CH16
 ```
 
 ### *CSV Input*
-Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the csv (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input to use.
+The CSV input will take a source name and an Ultix input in the format `Name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
+
+Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input to use.
 
 Input File:
 ```
