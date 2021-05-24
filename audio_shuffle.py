@@ -7,7 +7,7 @@ from os import path, write
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--channels", type=int, choices=[2, 4, 8, 16], default=16, help="Number of audio channels. Choose 2, 4, 8, or 16.")
 parser.add_argument("-l", "--list", default="sources.txt", help="Path or filename with list of sources.")
-parser.add_argument("-o", "--output", help="Path or filename of output CSV file.")
+parser.add_argument("-o", "--output", default="shuffled_audio.csv", help="Path or filename of output CSV file.")
 args = parser.parse_args()
 
 # Pulls the desired number of audio channels from the added argument. If nothing is provided, it defaults to 16 channels.
@@ -57,13 +57,10 @@ def write_dict(out_file, out_dict, fields):
         writer.writeheader()
         writer.writerows(out_dict)
 
-# Function that checks if an output path or filename was provided. If not, defaults to 'shuffled_audio.csv'.
+# Function that checks if an output path or filename was provided. If not, uses default 'shuffled_audio.csv'.
 def get_filename():
     out_file = args.output
-    if out_file is None:
-        out_file = "shuffled_audio.csv"
-    else:
-        if out_file.split(".")[-1] != "csv":
+    if out_file.split(".")[-1] != "csv":
             out_file += ".csv"
     
     return out_file
