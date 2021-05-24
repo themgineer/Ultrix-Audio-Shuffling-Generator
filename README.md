@@ -42,10 +42,10 @@ Notice that the CSV input does NOT include the Ultrix sdi or audio level informa
 
 Input File:
 ```
-Source 1, Ultrix.slot1.in[1]
-Source 2, Ultrix.slot1.in[1]
-Source 3, Ultrix.slot1.in[1]
-Source 4, Ultrix.slot1.in[1]
+Source 1,Ultrix.slot1.in[1]
+Source 2,Ultrix.slot1.in[1]
+Source 3,Ultrix.slot1.in[1]
+Source 4,Ultrix.slot1.in[1]
 ```
 
 Output File:
