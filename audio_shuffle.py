@@ -1,7 +1,6 @@
 import argparse
 import csv
-import os.path
-from os import path, write
+from os import path
 
 # Defining optional arguments for number of audio channels, a list of sources, etc. --help will display all of these.
 parser = argparse.ArgumentParser()
@@ -56,6 +55,7 @@ def write_dict(out_file, out_dict, fields):
         writer = csv.DictWriter(out, fieldnames = fields)
         writer.writeheader()
         writer.writerows(out_dict)
+    print("Output audio breakout list to '" + out_file + "'")
 
 # Function that checks if an output path or filename was provided. If not, uses default 'shuffled_audio.csv'.
 def get_filename():
