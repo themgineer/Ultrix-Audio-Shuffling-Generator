@@ -35,7 +35,7 @@ def run_as_dict(sources):
         for j in range(1, channels + 1):
             temp = [i + " " + "CH" + f"{j:02d}"]
             temp.extend(["",""])
-            for k in range(1,17):
+            for k in range(1,channels + 1):
                 temp.append(sources[i] + ".audio.ch" + str(j))
             tempDict = dict(zip(fields,temp))
             output.append(tempDict)
