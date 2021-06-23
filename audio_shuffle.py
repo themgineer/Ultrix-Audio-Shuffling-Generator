@@ -1,7 +1,6 @@
 import argparse
 import csv
 from os import path
-import time
 import PySimpleGUI as gui
 
 class OutputEmpty(Exception):
@@ -124,7 +123,7 @@ def main():
     while True:
         event, values = window.Read(timeout = 5000)
 
-        if event == 'Exit' or event == gui.WIN_CLOSED or event == None:
+        if event == 'Exit' or event == gui.WIN_CLOSED:
             break
         elif event == 'Go':
             message = process_file(values['source_file'], values['channels'], values['out_file'])
