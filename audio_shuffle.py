@@ -1,7 +1,14 @@
 import argparse
 import csv
 from os import path
+import time
 import PySimpleGUI as gui
+
+class OutputEmpty(Exception):
+    pass
+
+class InputEmpty(Exception):
+    pass
 
 # Function that runs if input file is detected as a list instead of a csv.
 # It recurses through the sources list and appends the channel number to it.
@@ -48,7 +55,7 @@ def write_dict(out_file, out_dict, fields):
 # Function that checks if an output path or filename was provided. If not, uses default 'shuffled_audio.csv'.
 def get_filename(out_file):
     if out_file.split(".")[-1] != "csv":
-            out_file += ".csv"
+        out_file += ".csv"
 
     return out_file
 
@@ -61,6 +68,11 @@ def process_file(list, channels, out_file):
     # If it doesn't find a path or filename, it will attempt to use 'sources.txt', but will fail if it cannot find it.
 
     try:
+        if list == "":
+            raise InputEmpty()
+        elif out_file == "":
+            raise OutputEmpty()
+
         sources = {}
         with open(list, mode='r') as src:
             read = csv.reader(src)
@@ -68,6 +80,10 @@ def process_file(list, channels, out_file):
         dict_return = run_as_dict(channels, sources, output, out_file)
         return(dict_return)
 
+    except InputEmpty:
+        return("Source list needs a name.")
+    except OutputEmpty:
+        return("Output file needs a name.")
     except Exception:
         try:
             sources = []
@@ -80,8 +96,9 @@ def process_file(list, channels, out_file):
                 sources.append(line.strip())
             source_file.close()
             return(run_as_list(channels, sources, output, out_file))
+
         except Exception:
-            return("No input file specified or file cannot be found.")
+            return("Input file cannot be found.")
             quit()
 
 def main():
@@ -97,21 +114,24 @@ def main():
                 [gui.Text('Audio Channels'), gui.Combo((2, 4, 8, 16), key='channels', default_value=16, readonly=True)],
                 [gui.HorizontalSeparator()],
                 [gui.Text('Output File'), gui.Input(key='out_file'), gui.FileBrowse()],
-                [gui.Text('',size=(50,1), key='out_message')],
-                [gui.OK(), gui.Exit()]]
+                [gui.Text(text='', key='out_message', justification='center', size=(50,1))],
+                [gui.Column([[gui.Button('Go')]], expand_x=True, element_justification='l'), gui.Column([[gui.Exit()]], element_justification='r')]]
 
     # Create the GUI Window
     window = gui.Window('Ultrix Audio Shuffle', layout)
 
     # Read the content of the window
     while True:
-        event, values = window.Read()
-        if event == "Exit" or event == gui.WIN_CLOSED:
+        event, values = window.Read(timeout = 5000)
+
+        if event == 'Exit' or event == gui.WIN_CLOSED or event == None:
             break
-
-        message = process_file(values['source_file'], values['channels'], values['out_file'])
-        window['out_message'].update(message)
-
+        elif event == 'Go':
+            message = process_file(values['source_file'], values['channels'], values['out_file'])
+            window['out_message'].expand(expand_x=True, expand_y=False, expand_row = True)
+            window['out_message'].update(message)
+        else:
+            window['out_message'].update('')
     window.close()
 
 if __name__ == '__main__':
