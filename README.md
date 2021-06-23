@@ -1,22 +1,10 @@
 # **Audio Breakaway Labels for Ultrix Database**
 This is a short, simple script that will take a list of source names and output a CSV of the audio breakouts.
 
-One thing to keep in mind is that this will overwrite any output file called `shuffled_audio.csv` that already exists if you do not specify a unique output filename or have the script use the default output file.
+The GUI interface is pretty simple. It asks for a source list filename, a number of audio channels, and an output filename. Once all of those are provided, just hit the `Go` button and it should provide a CSV file depending on the data structure of the input file. More on that below.
 
-## **Help Output**
-Available options can be viewed by using the `-h` or `--help` argument.
+![image](https://user-images.githubusercontent.com/19508086/123015888-099cff00-d38f-11eb-8156-769ed0e8111a.png)
 
-```
-usage: audio_shuffle.py [-h] [-c {2,4,8,16}] [-l LIST] [-o OUTPUT]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c {2,4,8,16}, --channels {2,4,8,16}
-                        Number of audio channels. Choose 2, 4, 8, or 16.
-  -l LIST, --list LIST  Path or filename with list of sources.
-  -o OUTPUT, --output OUTPUT
-                        Path or filename of output CSV file.
-```
 
 ## **Input Data Structure**
 Data can be input into the script through a txt file or a csv. Follow the below structures to ensure consistent output.
@@ -25,7 +13,7 @@ Data can be input into the script through a txt file or a csv. Follow the below 
 If you have a list of outputs, you can just put each name or label on a new line in a standard text file. The script will then output a list of those labels with the number of audio channels you specified.
 
 Input File:
-``` 
+```
 Source 1
 Source 2
 Source 3
