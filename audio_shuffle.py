@@ -1,6 +1,13 @@
 import argparse
 import csv
 from os import path
+import PySimpleGUI as gui
+
+class OutputEmpty(Exception):
+    pass
+
+class InputEmpty(Exception):
+    pass
 
 # Function that runs if input file is detected as a list instead of a csv.
 # It recurses through the sources list and appends the channel number to it.
@@ -9,7 +16,7 @@ def run_as_list(channels, sources, output, out_file):
         for j in range(1, channels + 1):
             output.append([i + " " + "CH" + f"{j:02d}"])
 
-    write_list(get_filename(out_file), output)
+    return(write_list(get_filename(out_file), output))
 
 # Function that runs if input file is detected as a csv instead of a list.
 # Generates a list of dictionaries that will match the Ultrix database when output to a csv.
@@ -27,14 +34,14 @@ def run_as_dict(channels, sources, output, out_file):
             tempDict = dict(zip(fields,temp))
             output.append(tempDict)
 
-    write_dict(get_filename(out_file),output, fields)
+    return(write_dict(get_filename(out_file),output, fields))
 
 # Function designed to output the list to a file.
 def write_list(filename, list):
     with open(filename, 'w', newline='') as out:
         writer = csv.writer(out)
         writer.writerows(list)
-    print("Output audio breakout list to '" + filename + "'")
+    return("Output successful!")
 
 # Function designed to generate csv that matches Ultrix database layout.
 def write_dict(out_file, out_dict, fields):
@@ -42,54 +49,89 @@ def write_dict(out_file, out_dict, fields):
         writer = csv.DictWriter(out, fieldnames = fields)
         writer.writeheader()
         writer.writerows(out_dict)
-    print("Output audio breakout list to '" + out_file + "'")
+    return("Output successful!")
 
 # Function that checks if an output path or filename was provided. If not, uses default 'shuffled_audio.csv'.
 def get_filename(out_file):
     if out_file.split(".")[-1] != "csv":
-            out_file += ".csv"
+        out_file += ".csv"
 
     return out_file
 
-def main(channels, list, out_file):
-
+def process_file(list, channels, out_file):
     # Initialize output list
     output = []
 
     # Main function that attempts to parse an input list or csv.
     # If it finds a path or filename, it uses it and attempts to process it.
     # If it doesn't find a path or filename, it will attempt to use 'sources.txt', but will fail if it cannot find it.
+
     try:
-        sourceFile = list
+        if list == "":
+            raise InputEmpty()
+        elif out_file == "":
+            raise OutputEmpty()
+
         sources = {}
-        with open(sourceFile, mode='r') as src:
+        with open(list, mode='r') as src:
             read = csv.reader(src)
             sources = {rows[0]:rows[1] for rows in read}
-        run_as_dict(channels, sources, output, out_file)
+        dict_return = run_as_dict(channels, sources, output, out_file)
+        return(dict_return)
 
+    except InputEmpty:
+        return("Source list needs a name.")
+    except OutputEmpty:
+        return("Output file needs a name.")
     except Exception:
         try:
             sources = []
-            sourceFile = open(list, 'r')
+            source_file = open(list, 'r')
             while True:
-                line = sourceFile.readline()
+                line = source_file.readline()
 
                 if not line:
                     break
                 sources.append(line.strip())
-            sourceFile.close()
-            run_as_list(channels, sources, output, out_file)
+            source_file.close()
+            return(run_as_list(channels, sources, output, out_file))
+
         except Exception:
-            print("No input file specified and 'sources.txt' cannot be found.")
+            return("Input file cannot be found.")
             quit()
 
+def main():
+
+    # GUI Theme
+    gui.theme('reddit')
+    gui.theme_background_color("#D9D6D1")
+    gui.theme_text_element_background_color("#D9D6D1")
+    gui.theme_button_color((None, "#D42E12"))
+
+    # GUI Layout
+    layout = [  [gui.Text('Source List'), gui.Input(key='source_file'), gui.FileBrowse()],
+                [gui.Text('Audio Channels'), gui.Combo((2, 4, 8, 16), key='channels', default_value=16, readonly=True)],
+                [gui.HorizontalSeparator()],
+                [gui.Text('Output File'), gui.Input(key='out_file'), gui.FileBrowse()],
+                [gui.Text(text='', key='out_message', justification='center', size=(50,1))],
+                [gui.Column([[gui.Button('Go')]], expand_x=True, element_justification='l'), gui.Column([[gui.Exit()]], element_justification='r')]]
+
+    # Create the GUI Window
+    window = gui.Window('Ultrix Audio Shuffle', layout)
+
+    # Read the content of the window
+    while True:
+        event, values = window.Read(timeout = 5000)
+
+        if event == 'Exit' or event == gui.WIN_CLOSED:
+            break
+        elif event == 'Go':
+            message = process_file(values['source_file'], values['channels'], values['out_file'])
+            window['out_message'].expand(expand_x=True, expand_y=False, expand_row = True)
+            window['out_message'].update(message)
+        else:
+            window['out_message'].update('')
+    window.close()
+
 if __name__ == '__main__':
-
-    # Defining optional arguments for number of audio channels, a list of sources, etc. --help will display all of these.
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--channels", type=int, choices=[2, 4, 8, 16], default=16, help="Number of audio channels. Choose 2, 4, 8, or 16.")
-    parser.add_argument("-l", "--list", default="sources.txt", help="Path or filename with list of sources.")
-    parser.add_argument("-o", "--output", default="shuffled_audio.csv", help="Path or filename of output CSV file.")
-    args = parser.parse_args()
-
-    main(args.channels, args.list, args.output)
+    main()
