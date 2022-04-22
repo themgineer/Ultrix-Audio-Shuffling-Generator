@@ -107,6 +107,17 @@ def process_file(list, channels, out_file):
             return("Input file cannot be found.")
 
 
+def get_folder(path):
+    if path == "":
+        out_path = ""
+    else:
+        path_list = path.split("/")
+        path_list[-1] = path_list[-1].split(".")[0] + "_shuffled.csv"
+        out_path = "/".join(path_list)
+
+    return(out_path)
+
+
 def main():
 
     # GUI Theme
@@ -117,7 +128,8 @@ def main():
 
     # GUI Layout
     layout = [[gui.Text('Source List'),
-               gui.Input(key='source_file'),
+               gui.Input(key='source_file',
+                         enable_events=True),
                gui.FileBrowse()],
               [gui.Text('Audio Channels'),
                gui.Combo((2, 4, 8, 16),
@@ -155,6 +167,8 @@ def main():
                                          expand_y=False,
                                          expand_row=True)
             window['out_message'].update(message)
+        elif event == "source_file":
+            window['out_file'].update(get_folder(values['source_file']))
         else:
             window['out_message'].update('')
     window.close()
