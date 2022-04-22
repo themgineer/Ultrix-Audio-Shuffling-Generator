@@ -8,11 +8,11 @@ The GUI interface is pretty simple. It asks for a source list filename, a number
 
 ## **Input Data Structure**
 
-Data can be input into the script through a txt file or a csv. Follow the below structures to ensure consistent output.
+Data can be input as a list of sources as a txt file or a table of source names and input ports as a csv. Follow the below structures to ensure consistent output.
 
 ### *List Input*
 
-If you have a list of outputs, you can just put each name or label on a new line in a standard text file. The script will then output a list of those labels with the number of audio channels you specified.
+If you have a list of input names, you can just put each name on a new line in a standard text file. The script will then output a csv of those names appended with audio channels numbers.
 
 Input File:
 
@@ -25,7 +25,7 @@ Source 4
 
 Output File:
 
-```txt
+```csv
 Source 1 CH01
 Source 1 CH02
 Source 1 CH03
@@ -44,7 +44,7 @@ Source 4 CH16
 
 ### *CSV Input*
 
-The CSV input will take a source name and an Ultix input in the format `Name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
+The CSV input will take a source name and an Ultrix input in the format `name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
 
 Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input to use.
 
