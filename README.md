@@ -44,7 +44,7 @@ Source 4 CH16
 
 ### *CSV Input*
 
-The CSV input will take a source name and an Ultix input in the format `Name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
+The CSV input will take a source name and an Ultrix input in the format `name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
 
 Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input to use.
 
