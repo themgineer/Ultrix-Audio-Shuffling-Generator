@@ -8,11 +8,11 @@ The GUI interface is pretty simple. It asks for a source list filename, a number
 
 ## **Input Data Structure**
 
-Data can be input into the script through a txt file or a csv. Follow the below structures to ensure consistent output.
+Data can be input as a list of sources as a txt file or a table of source names and input ports as a csv. Follow the below structures to ensure consistent output.
 
 ### *List Input*
 
-If you have a list of outputs, you can just put each name or label on a new line in a standard text file. The script will then output a list of those labels with the number of audio channels you specified.
+If you have a list of input names, you can just put each name on a new line in a standard text file. The script will then output a csv of those names appended with audio channels numbers.
 
 Input File:
 
@@ -25,7 +25,7 @@ Source 4
 
 Output File:
 
-```txt
+```csv
 Source 1 CH01
 Source 1 CH02
 Source 1 CH03
