@@ -21,19 +21,40 @@ def run_as_list(channels, sources, output, out_file):
 
 
 # Function that runs if input file is detected as a csv instead of a list.
-def run_as_dict(channels, sources, output, out_file):
+def run_as_dict(channels, grouping, sources, output, out_file):
     fields = ["Name", "Description", "Video"]
     for f in range(1, channels+1):
         fields.append("Audio " + str(f))
 
-    for i in sources:
-        for j in range(1, channels + 1):
-            temp = [i + " " + "CH" + f"{j:02d}"]
-            temp.extend(["", ""])
-            for k in range(1, channels + 1):
-                temp.append(sources[i] + ".audio.ch" + str(j))
-            tempDict = dict(zip(fields, temp))
-            output.append(tempDict)
+    if grouping == "Mono":
+        group_step = 1
+    elif grouping == "Stereo":
+        group_step = 2
+    elif grouping == "Quad":
+        group_step = 4
+    elif grouping == "Octo":
+        group_step = 8
+
+    if group_step == 1:
+        for i in sources:
+            for j in range(1, channels + 1):
+                temp = [i + " " + "CH" + f"{j:02d}"]
+                temp.extend(["", ""])
+                for k in range(1, channels + 1):
+                    temp.append(sources[i] + ".audio.ch" + str(j))
+                tempDict = dict(zip(fields, temp))
+                output.append(tempDict)
+    else:
+        for i in sources:
+            for j in range(1, channels + 1, group_step):
+                temp = [i + " " + "CH" + str(j) + "-" + str(j +
+                        (group_step - 1))]
+                temp.extend(["", ""])
+                for k in range(1, channels + 1, group_step):
+                    for m in range(j, j + group_step):
+                        temp.append(sources[i] + ".audio.ch" + str(m))
+                tempDict = dict(zip(fields, temp))
+                output.append(tempDict)
 
     return(write_dict(get_filename(out_file), output, fields))
 
@@ -64,7 +85,7 @@ def get_filename(out_file):
     return out_file
 
 
-def process_file(list, channels, out_file):
+def process_file(list, channels, grouping, out_file):
     # Initialize output list
     output = []
 
@@ -83,7 +104,8 @@ def process_file(list, channels, out_file):
         with open(list, mode='r') as src:
             read = csv.reader(src)
             sources = {rows[0]: rows[1] for rows in read}
-        dict_return = run_as_dict(channels, sources, output, out_file)
+        dict_return = run_as_dict(
+            channels, grouping, sources, output, out_file)
         return(dict_return)
 
     except InputEmpty:
@@ -135,6 +157,11 @@ def main():
                gui.Combo((2, 4, 8, 16),
                          key='channels',
                          default_value=16,
+                         readonly=True),
+               gui.Text('Audio Grouping', pad=((30, 0), (0, 0))),
+               gui.Combo(('Mono', 'Stereo', 'Quad', 'Octo'),
+                         key='grouping',
+                         default_value='Mono',
                          readonly=True)],
               [gui.HorizontalSeparator()],
               [gui.Text('Output File'),
@@ -162,6 +189,7 @@ def main():
         elif event == 'Go':
             message = process_file(values['source_file'],
                                    values['channels'],
+                                   values['grouping'],
                                    values['out_file'])
             window['out_message'].expand(expand_x=True,
                                          expand_y=False,

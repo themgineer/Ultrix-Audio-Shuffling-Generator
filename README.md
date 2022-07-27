@@ -2,9 +2,16 @@
 
 This is a short, simple script that will take a list of source names and output a CSV of the audio breakouts.
 
-The GUI interface is pretty simple. It asks for a source list filename, a number of audio channels, and an output filename. Once all of those are provided, just hit the `Go` button and it should provide a CSV file depending on the data structure of the input file. More on that below.
+The GUI interface is pretty simple. It asks for a source list filename, a number of audio channels, how you want your audio grouped, and an output filename. Once all of those are provided, just hit the `Go` button and it should provide a CSV file depending on the data structure of the input file. More on that below.
 
-![image](https://user-images.githubusercontent.com/19508086/123015888-099cff00-d38f-11eb-8156-769ed0e8111a.png)
+![Screenshot of the window](https://github.com/thompsant/thompsant.github.io/raw/main/images/ui.png)
+
+**Source List:** Enter or Browse to the file path of a txt or csv file that contains the data you wish to use.
+**Audio Channels:** Choose the number of audio levels your database has. This assumes you use 2, 4, 8, or 16 audio channels as these are the most common configurations.
+**Audio Grouping:** Choose how you want the audio channels grouped (mono, stereo, quads, or octo)
+**Output File:** Enter or Browse to the file path you wish your output csv file to have. This field will automatically update based on the file path entered in the **Source List** field.
+
+-----
 
 ## **Input Data Structure**
 
@@ -46,7 +53,7 @@ Source 4 CH16
 
 The CSV input will take a source name and an Ultrix input in the format `name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
 
-Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input to use.
+Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input to use. **This script assumes you have not changed your port labels from their default values.**
 
 Input File:
 
