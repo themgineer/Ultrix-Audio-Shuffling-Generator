@@ -152,7 +152,8 @@ def main():
     # GUI Layout
     layout = [[gui.Text('Source List'),
                gui.Input(key='source_file',
-                         enable_events=True),
+                         enable_events=True,
+                         focus=True),
                gui.FileBrowse()],
               [gui.Text('Audio Channels'),
                gui.Combo((2, 4, 8, 16),
