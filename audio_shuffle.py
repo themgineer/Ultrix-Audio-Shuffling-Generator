@@ -125,9 +125,10 @@ def process_file(list, channels, grouping, out_file):
                 sources.append(line.strip())
             source_file.close()
             return(run_as_list(channels, sources, output, out_file))
-
-        except FileNotFoundError:
-            return("Input file cannot be found.")
+        except Exception:
+            return("Unknown error occurred.")
+    except FileNotFoundError:
+        return("Input file cannot be found.")
 
 
 def get_folder(path):
