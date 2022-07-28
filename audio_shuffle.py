@@ -26,14 +26,15 @@ def run_as_dict(channels, grouping, sources, output, out_file):
     for f in range(1, channels+1):
         fields.append("Audio " + str(f))
 
-    if grouping == "Mono":
-        group_step = 1
-    elif grouping == "Stereo":
-        group_step = 2
-    elif grouping == "Quad":
-        group_step = 4
-    elif grouping == "Octo":
-        group_step = 8
+    match grouping:
+        case "Mono":
+            group_step = 1
+        case "Stereo":
+            group_step = 2
+        case "Quad":
+            group_step = 4
+        case "Octo":
+            group_step = 8
 
     if group_step == 1:
         for i in sources:
