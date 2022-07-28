@@ -113,7 +113,7 @@ def process_file(list, channels, grouping, out_file):
         return("Source list needs a name.")
     except OutputEmpty:
         return("Output file needs a name.")
-    except Exception:
+    except IndexError:
         try:
             sources = []
             source_file = open(list, 'r')
@@ -126,7 +126,7 @@ def process_file(list, channels, grouping, out_file):
             source_file.close()
             return(run_as_list(channels, sources, output, out_file))
 
-        except Exception:
+        except FileNotFoundError:
             return("Input file cannot be found.")
 
 
