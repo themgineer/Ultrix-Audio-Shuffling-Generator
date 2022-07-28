@@ -17,7 +17,9 @@ def run_as_list(channels, sources, output, out_file):
         for j in range(1, channels + 1):
             output.append([i + " " + "CH" + f"{j:02d}"])
 
-    return(write_list(get_filename(out_file), output))
+    out_file = get_filename(out_file)
+
+    return(write_list(out_file, output))
 
 
 # Function that runs if input file is detected as a csv instead of a list.
@@ -57,7 +59,9 @@ def run_as_dict(channels, grouping, sources, output, out_file):
                 tempDict = dict(zip(fields, temp))
                 output.append(tempDict)
 
-    return(write_dict(get_filename(out_file), output, fields))
+    out_file = get_filename(out_file)
+
+    return(write_dict(out_file, output, fields))
 
 
 # Function designed to output the list to a file.
@@ -124,9 +128,14 @@ def process_file(list, channels, grouping, out_file):
                     break
                 sources.append(line.strip())
             source_file.close()
-            return(run_as_list(channels, sources, output, out_file))
+
+            return_list = run_as_list(channels, sources, output, out_file)
+
+            return(return_list)
+
         except Exception:
             return("Unknown error occurred.")
+
     except FileNotFoundError:
         return("Input file cannot be found.")
 
