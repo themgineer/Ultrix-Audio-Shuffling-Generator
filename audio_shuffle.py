@@ -48,8 +48,8 @@ def run_as_dict(channels, grouping, sources, output, out_file):
     else:
         for i in sources:
             for j in range(1, channels + 1, group_step):
-                temp = [i + " " + "CH" + str(j) + "-" + str(j +
-                        (group_step - 1))]
+                temp = [i + " " + "CH" + str(j) + "-" +
+                        str(j + (group_step - 1))]
                 temp.extend(["", ""])
                 for k in range(1, channels + 1, group_step):
                     for m in range(j, j + group_step):
