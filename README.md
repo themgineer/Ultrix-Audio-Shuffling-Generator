@@ -6,10 +6,10 @@ The GUI interface is pretty simple. It asks for a source list filename, a number
 
 ![Screenshot of the window](https://github.com/thompsant/thompsant.github.io/raw/main/images/ui.png)
 
-**Source List:** Enter or Browse to the file path of a txt or csv file that contains the data you wish to use.
-**Audio Channels:** Choose the number of audio levels your database has. This assumes you use 2, 4, 8, or 16 audio channels as these are the most common configurations.
-**Audio Grouping:** Choose how you want the audio channels grouped (mono, stereo, quads, or octo)
-**Output File:** Enter or Browse to the file path you wish your output csv file to have. This field will automatically update based on the file path entered in the **Source List** field.
+- **Source List:** Enter or Browse to the file path of a txt or csv file that contains the data you wish to use.
+- **Audio Channels:** Choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
+- **Audio Grouping:** Choose how you want the audio channels grouped (**Mono**, **Stereo**, **Quad**, or **Octo**)
+- **Output File:** Enter or Browse to the file path you wish your output csv file to have. This field will automatically update based on the file path entered in the **Source List** field.
 
 -----
 
