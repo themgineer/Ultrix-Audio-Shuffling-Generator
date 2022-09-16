@@ -12,30 +12,51 @@ class InputEmpty(Exception):
 
 # Function that runs if input file is detected as a list instead of a csv.
 # It recurses through the sources list and appends the channel number to it.
-def run_as_list(channels, sources, output, out_file):
-    for i in sources:
-        for j in range(1, channels + 1):
-            output.append([i + " " + "CH" + f"{j:02d}"])
+def run_as_list(channels, group_step, sources, output, out_file):
 
-    return(write_list(get_filename(out_file), output))
+    if group_step == 1:
+        for i in sources:
+            for j in range(1, channels + 1):
+                output.append([f"{i} CH{j:02d}"])
+    else:
+        for i in sources:
+            for j in range(1, channels + 1, group_step):
+                output.append([f"{i} CH{j:02d}-{j+(group_step - 1):02d}"])
+
+    out_file = get_filename(out_file)
+
+    return(write_list(out_file, output))
 
 
 # Function that runs if input file is detected as a csv instead of a list.
-def run_as_dict(channels, sources, output, out_file):
+def run_as_dict(channels, group_step, sources, output, out_file):
     fields = ["Name", "Description", "Video"]
     for f in range(1, channels+1):
-        fields.append("Audio " + str(f))
+        fields.append(f"Audio {f}")
 
-    for i in sources:
-        for j in range(1, channels + 1):
-            temp = [i + " " + "CH" + f"{j:02d}"]
-            temp.extend(["", ""])
-            for k in range(1, channels + 1):
-                temp.append(sources[i] + ".audio.ch" + str(j))
-            tempDict = dict(zip(fields, temp))
-            output.append(tempDict)
+    if group_step == 1:
+        for i in sources:
+            for j in range(1, channels + 1):
+                temp = ([f"{i} CH{j:02d}"])
+                temp.extend(["", ""])
+                for k in range(1, channels + 1):
+                    temp.append(f"{sources[i]}.audio.ch{j}")
+                tempDict = dict(zip(fields, temp))
+                output.append(tempDict)
+    else:
+        for i in sources:
+            for j in range(1, channels + 1, group_step):
+                temp = [f"{i} CH{j:02d}-{j + (group_step - 1):02d}"]
+                temp.extend(["", ""])
+                for k in range(1, channels + 1, group_step):
+                    for m in range(j, j + group_step):
+                        temp.append(f"{sources[i]}.audio.ch{m}")
+                tempDict = dict(zip(fields, temp))
+                output.append(tempDict)
 
-    return(write_dict(get_filename(out_file), output, fields))
+    out_file = get_filename(out_file)
+
+    return(write_dict(out_file, output, fields))
 
 
 # Function designed to output the list to a file.
@@ -64,9 +85,19 @@ def get_filename(out_file):
     return out_file
 
 
-def process_file(list, channels, out_file):
+def process_file(list, channels, grouping, out_file):
     # Initialize output list
     output = []
+
+    match grouping:
+        case "Mono":
+            group_step = 1
+        case "Stereo":
+            group_step = 2
+        case "Quad":
+            group_step = 4
+        case "Octo":
+            group_step = 8
 
     # Main function that attempts to parse an input list or csv.
     # If it finds a path or filename, it uses it and attempts to process it.
@@ -83,14 +114,15 @@ def process_file(list, channels, out_file):
         with open(list, mode='r') as src:
             read = csv.reader(src)
             sources = {rows[0]: rows[1] for rows in read}
-        dict_return = run_as_dict(channels, sources, output, out_file)
+        dict_return = run_as_dict(
+            channels, group_step, sources, output, out_file)
         return(dict_return)
 
     except InputEmpty:
         return("Source list needs a name.")
     except OutputEmpty:
         return("Output file needs a name.")
-    except Exception:
+    except IndexError:
         try:
             sources = []
             source_file = open(list, 'r')
@@ -101,10 +133,20 @@ def process_file(list, channels, out_file):
                     break
                 sources.append(line.strip())
             source_file.close()
-            return(run_as_list(channels, sources, output, out_file))
+
+            return_list = run_as_list(channels,
+                                      group_step,
+                                      sources,
+                                      output,
+                                      out_file)
+
+            return(return_list)
 
         except Exception:
-            return("Input file cannot be found.")
+            return("Unknown error occurred.")
+
+    except FileNotFoundError:
+        return("Input file cannot be found.")
 
 
 def get_folder(path):
@@ -112,7 +154,7 @@ def get_folder(path):
         out_path = ""
     else:
         path_list = path.split("/")
-        path_list[-1] = path_list[-1].split(".")[0] + "_shuffled.csv"
+        path_list[-1] = f"{path_list[-1].split('.')[0]}_shuffled.csv"
         out_path = "/".join(path_list)
 
     return(out_path)
@@ -129,12 +171,19 @@ def main():
     # GUI Layout
     layout = [[gui.Text('Source List'),
                gui.Input(key='source_file',
-                         enable_events=True),
+                         enable_events=True,
+                         focus=True),
                gui.FileBrowse()],
               [gui.Text('Audio Channels'),
                gui.Combo((2, 4, 8, 16),
                          key='channels',
                          default_value=16,
+                         readonly=True),
+               gui.Text('Audio Grouping',
+                        pad=((30, 0), (0, 0))),
+               gui.Combo(('Mono', 'Stereo', 'Quad', 'Octo'),
+                         key='grouping',
+                         default_value='Mono',
                          readonly=True)],
               [gui.HorizontalSeparator()],
               [gui.Text('Output File'),
@@ -162,6 +211,7 @@ def main():
         elif event == 'Go':
             message = process_file(values['source_file'],
                                    values['channels'],
+                                   values['grouping'],
                                    values['out_file'])
             window['out_message'].expand(expand_x=True,
                                          expand_y=False,
