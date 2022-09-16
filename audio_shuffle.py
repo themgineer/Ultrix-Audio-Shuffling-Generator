@@ -37,7 +37,7 @@ def run_as_dict(channels, group_step, sources, output, out_file):
     if group_step == 1:
         for i in sources:
             for j in range(1, channels + 1):
-                temp = ([f"i CH{j:02d}"])
+                temp = ([f"{i} CH{j:02d}"])
                 temp.extend(["", ""])
                 for k in range(1, channels + 1):
                     temp.append(f"{sources[i]}.audio.ch{j}")
