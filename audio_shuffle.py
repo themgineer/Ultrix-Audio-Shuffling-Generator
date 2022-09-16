@@ -32,26 +32,24 @@ def run_as_list(channels, group_step, sources, output, out_file):
 def run_as_dict(channels, group_step, sources, output, out_file):
     fields = ["Name", "Description", "Video"]
     for f in range(1, channels+1):
-        fields.append("Audio " + str(f))
+        fields.append(f"Audio {f}")
 
     if group_step == 1:
         for i in sources:
             for j in range(1, channels + 1):
-                temp = [i + " " + "CH" + f"{j:02d}"]
-                temp.extend(["", ""])
+                temp.extend([f"i CH{j:02d}","", ""])
                 for k in range(1, channels + 1):
-                    temp.append(sources[i] + ".audio.ch" + str(j))
+                    temp.append(f"{sources[i]}.audio.ch{j}")
                 tempDict = dict(zip(fields, temp))
                 output.append(tempDict)
     else:
         for i in sources:
             for j in range(1, channels + 1, group_step):
-                temp = [i + " " + "CH" + str(j) + "-" +
-                        str(j + (group_step - 1))]
+                temp = [f"{i} CH{j:02d}-{j + (group_step - 1):02d}"]
                 temp.extend(["", ""])
                 for k in range(1, channels + 1, group_step):
                     for m in range(j, j + group_step):
-                        temp.append(sources[i] + ".audio.ch" + str(m))
+                        temp.append(f"{sources[i]}.audio.ch{m}")
                 tempDict = dict(zip(fields, temp))
                 output.append(tempDict)
 
@@ -151,7 +149,7 @@ def get_folder(path):
         out_path = ""
     else:
         path_list = path.split("/")
-        path_list[-1] = path_list[-1].split(".")[0] + "_shuffled.csv"
+        path_list[-1] = f"{path_list[-1].split('.')[0]}_shuffled.csv"
         out_path = "/".join(path_list)
 
     return(out_path)
