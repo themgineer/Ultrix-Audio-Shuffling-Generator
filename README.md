@@ -4,7 +4,9 @@ This is a short, simple script that will take a list of source names and output 
 
 The GUI interface is pretty simple. It asks for a source list filename, a number of audio channels, how you want your audio grouped, and an output filename. Once all of those are provided, just hit the `Go` button and it should provide a CSV file depending on the data structure of the input file. More on that below.
 
-![Screenshot of the window](https://github.com/thompsant/thompsant.github.io/raw/main/images/ui.png)
+<p align="center">
+  <img src="https://github.com/thompsant/thompsant.github.io/raw/main/images/ui.png" alt="Screenshot of Audio Shuffle interface."/>
+</p>
 
 - **Source List:** Enter or Browse to the file path of a txt or csv file that contains the data you wish to use.
 - **Audio Channels:** Choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
