@@ -200,7 +200,7 @@ def main():
                           element_justification='r')]]
 
     # Create the GUI Window
-    window = gui.Window('Ultrix Audio Shuffle', layout)
+    window = gui.Window('Ultrix Audio Breakaway Generator', layout)
 
     # Read the content of the window
     while True:
