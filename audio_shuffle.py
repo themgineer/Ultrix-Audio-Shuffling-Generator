@@ -21,7 +21,7 @@ def run_as_list(channels, group_step, sources, output, out_file):
     else:
         for i in sources:
             for j in range(1, channels + 1, group_step):
-                output.append([f"{i} CH{j:02d}-{j+(group_step - 1):02d}"]) 
+                output.append([f"{i} CH{j:02d}-{j+(group_step - 1):02d}"])
 
     out_file = get_filename(out_file)
 
@@ -134,7 +134,11 @@ def process_file(list, channels, grouping, out_file):
                 sources.append(line.strip())
             source_file.close()
 
-            return_list = run_as_list(channels, group_step, sources, output, out_file)
+            return_list = run_as_list(channels,
+                                      group_step,
+                                      sources,
+                                      output,
+                                      out_file)
 
             return(return_list)
 
