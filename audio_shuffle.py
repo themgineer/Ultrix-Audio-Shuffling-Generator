@@ -12,10 +12,16 @@ class InputEmpty(Exception):
 
 # Function that runs if input file is detected as a list instead of a csv.
 # It recurses through the sources list and appends the channel number to it.
-def run_as_list(channels, sources, output, out_file):
-    for i in sources:
-        for j in range(1, channels + 1):
-            output.append([i + " " + "CH" + f"{j:02d}"])
+def run_as_list(channels, group_step, sources, output, out_file):
+
+    if group_step == 1:
+        for i in sources:
+            for j in range(1, channels + 1):
+                output.append([f"{i} CH{j:02d}"])
+    else:
+        for i in sources:
+            for j in range(1, channels + 1, group_step):
+                output.append([f"{i} CH{j:02d}-{j+(group_step - 1):02d}"]) 
 
     out_file = get_filename(out_file)
 
@@ -23,20 +29,10 @@ def run_as_list(channels, sources, output, out_file):
 
 
 # Function that runs if input file is detected as a csv instead of a list.
-def run_as_dict(channels, grouping, sources, output, out_file):
+def run_as_dict(channels, group_step, sources, output, out_file):
     fields = ["Name", "Description", "Video"]
     for f in range(1, channels+1):
         fields.append("Audio " + str(f))
-
-    match grouping:
-        case "Mono":
-            group_step = 1
-        case "Stereo":
-            group_step = 2
-        case "Quad":
-            group_step = 4
-        case "Octo":
-            group_step = 8
 
     if group_step == 1:
         for i in sources:
@@ -94,6 +90,16 @@ def process_file(list, channels, grouping, out_file):
     # Initialize output list
     output = []
 
+    match grouping:
+        case "Mono":
+            group_step = 1
+        case "Stereo":
+            group_step = 2
+        case "Quad":
+            group_step = 4
+        case "Octo":
+            group_step = 8
+
     # Main function that attempts to parse an input list or csv.
     # If it finds a path or filename, it uses it and attempts to process it.
     # If it doesn't find a path or filename,
@@ -110,7 +116,7 @@ def process_file(list, channels, grouping, out_file):
             read = csv.reader(src)
             sources = {rows[0]: rows[1] for rows in read}
         dict_return = run_as_dict(
-            channels, grouping, sources, output, out_file)
+            channels, group_step, sources, output, out_file)
         return(dict_return)
 
     except InputEmpty:
@@ -129,7 +135,7 @@ def process_file(list, channels, grouping, out_file):
                 sources.append(line.strip())
             source_file.close()
 
-            return_list = run_as_list(channels, sources, output, out_file)
+            return_list = run_as_list(channels, group_step, sources, output, out_file)
 
             return(return_list)
 
