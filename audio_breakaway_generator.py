@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import os
 import csv
 import PySimpleGUI as gui
@@ -111,9 +112,9 @@ def process_file(list, channels, grouping, out_file):
     # it will attempt to use 'sources.txt', but will fail if it cannot find it.
 
     try:
-        if list == "":
+        if list == "" or list == NULL:
             raise InputEmpty()
-        elif out_file == "":
+        elif out_file == "" or out_file == NULL:
             raise OutputEmpty()
 
         sources = {}
