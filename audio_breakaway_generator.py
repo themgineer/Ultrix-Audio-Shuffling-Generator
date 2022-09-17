@@ -1,3 +1,4 @@
+import os
 import csv
 import PySimpleGUI as gui
 
@@ -8,6 +9,11 @@ class OutputEmpty(Exception):
 
 class InputEmpty(Exception):
     pass
+
+
+def icon_path(image):
+    root = os.path.dirname(__file__)
+    return os.path.join(root, image)
 
 
 # Function that runs if input file is detected as a list instead of a csv.
@@ -201,7 +207,7 @@ def main():
 
     # Create the GUI Window
     window = gui.Window('Ultrix Audio Breakaway Generator', layout,
-                        icon="icon/Ultrix_U.ico")
+                        icon=icon_path("icon/Ultrix_U.ico"))
 
     # Read the content of the window
     while True:
