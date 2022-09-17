@@ -25,7 +25,7 @@ def run_as_list(channels, group_step, sources, output, out_file):
 
     out_file = get_filename(out_file)
 
-    return(write_list(out_file, output))
+    return write_list(out_file, output)
 
 
 # Function that runs if input file is detected as a csv instead of a list.
@@ -56,7 +56,7 @@ def run_as_dict(channels, group_step, sources, output, out_file):
 
     out_file = get_filename(out_file)
 
-    return(write_dict(out_file, output, fields))
+    return write_dict(out_file, output, fields)
 
 
 # Function designed to output the list to a file.
@@ -64,7 +64,7 @@ def write_list(filename, list):
     with open(filename, 'w', newline='') as out:
         writer = csv.writer(out)
         writer.writerows(list)
-    return("Output successful!")
+    return "Output successful!"
 
 
 # Function designed to generate csv that matches Ultrix database layout.
@@ -73,7 +73,7 @@ def write_dict(out_file, out_dict, fields):
         writer = csv.DictWriter(out, fieldnames=fields)
         writer.writeheader()
         writer.writerows(out_dict)
-    return("Output successful!")
+    return "Output successful!"
 
 
 # Function that checks if an output path or filename was provided.
@@ -116,12 +116,12 @@ def process_file(list, channels, grouping, out_file):
             sources = {rows[0]: rows[1] for rows in read}
         dict_return = run_as_dict(
             channels, group_step, sources, output, out_file)
-        return(dict_return)
+        return dict_return
 
     except InputEmpty:
-        return("Source list needs a name.")
+        return "Source list needs a name."
     except OutputEmpty:
-        return("Output file needs a name.")
+        return "Output file needs a name."
     except IndexError:
         try:
             sources = []
@@ -140,13 +140,13 @@ def process_file(list, channels, grouping, out_file):
                                       output,
                                       out_file)
 
-            return(return_list)
+            return return_list
 
         except Exception:
-            return("Unknown error occurred.")
+            return "Unknown error occurred."
 
     except FileNotFoundError:
-        return("Input file cannot be found.")
+        return "Input file cannot be found."
 
 
 def get_folder(path):
@@ -157,7 +157,7 @@ def get_folder(path):
         path_list[-1] = f"{path_list[-1].split('.')[0]}_shuffled.csv"
         out_path = "/".join(path_list)
 
-    return(out_path)
+    return out_path
 
 
 def main():
