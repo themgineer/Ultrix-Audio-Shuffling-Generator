@@ -196,13 +196,13 @@ def main():
               [gui.Text('Output File'),
                gui.Input(key='out_file'),
                gui.FileBrowse()],
-              [gui.Text(text='',
+              [gui.Column([[gui.Button('Go')]],
+                          element_justification='l'),
+               gui.Text(text='',
                         key='out_message',
                         justification='center',
-                        size=(50, 1))],
-              [gui.Column([[gui.Button('Go')]],
-                          expand_x=True,
-                          element_justification='l'),
+                        size=(30, 1),
+                        expand_x=True,),
                gui.Column([[gui.Exit()]],
                           element_justification='r')]]
 
@@ -221,9 +221,6 @@ def main():
                                    values['channels'],
                                    values['grouping'],
                                    values['out_file'])
-            window['out_message'].expand(expand_x=True,
-                                         expand_y=False,
-                                         expand_row=True)
             window['out_message'].update(message)
         elif event == "source_file":
             window['out_file'].update(get_folder(values['source_file']))
