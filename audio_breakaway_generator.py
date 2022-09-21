@@ -96,15 +96,14 @@ def process_file(list, channels, grouping, out_file):
     # Initialize output list
     output = []
 
-    match grouping:
-        case "Mono":
-            group_step = 1
-        case "Stereo":
-            group_step = 2
-        case "Quad":
-            group_step = 4
-        case "Octo":
-            group_step = 8
+    if grouping == "Mono":
+        group_step = 1
+    elif grouping == "Stereo":
+        group_step = 2
+    elif grouping == "Quad":
+        group_step = 4
+    else:
+        group_step = 8
 
     # Main function that attempts to parse an input list or csv.
     # If it finds a path or filename, it uses it and attempts to process it.
