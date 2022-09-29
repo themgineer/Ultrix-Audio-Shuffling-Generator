@@ -102,8 +102,10 @@ def process_file(list, channels, grouping, out_file):
         group_step = 2
     elif grouping == "Quad":
         group_step = 4
-    else:
+    elif grouping == "Octo":
         group_step = 8
+    else:
+        group_step = -1
 
     # Main function that attempts to parse an input list or csv.
     # If it finds a path or filename, it uses it and attempts to process it.
