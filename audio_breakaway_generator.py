@@ -106,6 +106,9 @@ def process_file(list, channels, grouping, out_file):
     else:
         raise InvalidGroup()
 
+    if group_step > channels:
+        group_step = channels
+
     # Main function that attempts to parse an input list or csv.
     # If it finds a path or filename, it uses it and attempts to process it.
     # If it doesn't find a path or filename,
