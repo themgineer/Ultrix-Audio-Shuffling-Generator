@@ -12,6 +12,10 @@ class InputEmpty(Exception):
     pass
 
 
+class InvalidGroup(Exception):
+    pass
+
+
 def icon_path(image):
     root = os.path.dirname(__file__)
     return os.path.join(root, image)
@@ -95,17 +99,12 @@ def get_filename(out_file):
 def process_file(list, channels, grouping, out_file):
     # Initialize output list
     output = []
+    group_dict = {"Mono": 1, "Stereo": 2, "Quad": 4, "Octo": 8}
 
-    if grouping == "Mono":
-        group_step = 1
-    elif grouping == "Stereo":
-        group_step = 2
-    elif grouping == "Quad":
-        group_step = 4
-    elif grouping == "Octo":
-        group_step = 8
+    if grouping in group_dict:
+        group_step = group_dict[grouping]
     else:
-        group_step = -1
+        raise InvalidGroup()
 
     # Main function that attempts to parse an input list or csv.
     # If it finds a path or filename, it uses it and attempts to process it.
@@ -113,9 +112,9 @@ def process_file(list, channels, grouping, out_file):
     # it will attempt to use 'sources.txt', but will fail if it cannot find it.
 
     try:
-        if list == "" or list == NULL:
+        if list == "" or list is None:
             raise InputEmpty()
-        elif out_file == "" or out_file == NULL:
+        elif out_file == "" or out_file is None:
             raise OutputEmpty()
 
         sources = {}
@@ -126,6 +125,8 @@ def process_file(list, channels, grouping, out_file):
             channels, group_step, sources, output, out_file)
         return dict_return
 
+    except InvalidGroup:
+        return "Invalid Audio Grouping Selection"
     except InputEmpty:
         return "Source list needs a name."
     except OutputEmpty:
