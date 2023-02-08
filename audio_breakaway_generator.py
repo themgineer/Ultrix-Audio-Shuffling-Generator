@@ -27,6 +27,21 @@ def run_as_list(channels, group_step, sources, output, out_file):
     if group_step == 1:
         for i in sources:
             for j in range(1, channels + 1):
+                output.append([f"{i} CH{j}"])
+    else:
+        for i in sources:
+            for j in range(1, channels + 1, group_step):
+                output.append([f"{i} CH{j}-{j+(group_step - 1)}"])
+
+    out_file = get_filename(out_file)
+
+    return write_list(out_file, output)
+
+def run_as_list_LZ(channels, group_step, sources, output, out_file):
+
+    if group_step == 1:
+        for i in sources:
+            for j in range(1, channels + 1):
                 output.append([f"{i} CH{j:02d}"])
     else:
         for i in sources:
@@ -40,6 +55,35 @@ def run_as_list(channels, group_step, sources, output, out_file):
 
 # Function that runs if input file is detected as a csv instead of a list.
 def run_as_dict(channels, group_step, sources, output, out_file):
+    fields = ["Name", "Description", "Video"]
+    for f in range(1, channels+1):
+        fields.append(f"Audio {f}")
+
+    if group_step == 1:
+        for i in sources:
+            for j in range(1, channels + 1):
+                temp = ([f"{i} CH{j}"])
+                temp.extend(["", ""])
+                for k in range(1, channels + 1):
+                    temp.append(f"{sources[i]}.audio.ch{j}")
+                tempDict = dict(zip(fields, temp))
+                output.append(tempDict)
+    else:
+        for i in sources:
+            for j in range(1, channels + 1, group_step):
+                temp = [f"{i} CH{j}-{j + (group_step - 1)}"]
+                temp.extend(["", ""])
+                for k in range(1, channels + 1, group_step):
+                    for m in range(j, j + group_step):
+                        temp.append(f"{sources[i]}.audio.ch{m}")
+                tempDict = dict(zip(fields, temp))
+                output.append(tempDict)
+
+    out_file = get_filename(out_file)
+
+    return write_dict(out_file, output, fields)
+
+def run_as_dict_LZ(channels, group_step, sources, output, out_file):
     fields = ["Name", "Description", "Video"]
     for f in range(1, channels+1):
         fields.append(f"Audio {f}")
@@ -95,7 +139,7 @@ def get_filename(out_file):
     return out_file
 
 
-def process_file(list, channels, grouping, out_file):
+def process_file(list, channels, grouping, out_file, LZ):
     # Initialize output list
     output = []
     group_dict = {"Mono": 1, "Stereo": 2, "Quad": 4, "Octo": 8}
@@ -123,8 +167,13 @@ def process_file(list, channels, grouping, out_file):
         with open(list, mode='r') as src:
             read = csv.reader(src)
             sources = {rows[0]: rows[1] for rows in read}
-        dict_return = run_as_dict(
-            channels, group_step, sources, output, out_file)
+        
+        if LZ:
+            dict_return = run_as_dict_LZ(
+                channels, group_step, sources, output, out_file)
+        else:
+            dict_return = run_as_dict(
+                channels, group_step, sources, output, out_file)
         return dict_return
 
     except InvalidGroup:
@@ -136,20 +185,25 @@ def process_file(list, channels, grouping, out_file):
     except IndexError:
         try:
             sources = []
-            source_file = open(list, 'r')
-            while True:
-                line = source_file.readline()
 
-                if not line:
-                    break
-                sources.append(line.strip())
-            source_file.close()
+            with open(list, mode='r') as src:
+                for line in src:
+                    if line[0] == '\n' or line[0] == '#':
+                        continue
+                    sources.append(line.strip())
 
-            return_list = run_as_list(channels,
-                                      group_step,
-                                      sources,
-                                      output,
-                                      out_file)
+            if LZ:
+                return_list = run_as_list_LZ(channels,
+                                             group_step,
+                                             sources,
+                                             output,
+                                             out_file)
+            else:
+                return_list = run_as_list(channels,
+                                          group_step,
+                                          sources,
+                                          output,
+                                          out_file)
 
             return return_list
 
@@ -177,6 +231,7 @@ def main():
     gui.theme('reddit')
     gui.theme_background_color("#D9D6D1")
     gui.theme_text_element_background_color("#D9D6D1")
+    gui.theme_input_background_color("#EFEFEF")
     gui.theme_button_color((None, "#D42E12"))
 
     # GUI Layout
@@ -191,11 +246,16 @@ def main():
                          default_value=16,
                          readonly=True),
                gui.Text('Audio Grouping',
-                        pad=((30, 0), (0, 0))),
+                        pad=((15, 0), (0, 0))),
                gui.Combo(('Mono', 'Stereo', 'Quad', 'Octo'),
                          key='grouping',
                          default_value='Mono',
-                         readonly=True)],
+                         readonly=True),
+               gui.Checkbox(text='Leading Zeroes',
+                            key='LZ',
+                            pad=((15, 0), (0, 0)),
+                            background_color='#D9D6D1',
+                            checkbox_color='#FFFFFF')],
               [gui.HorizontalSeparator()],
               [gui.Text('Output File'),
                gui.Input(key='out_file'),
@@ -224,7 +284,8 @@ def main():
             message = process_file(values['source_file'],
                                    values['channels'],
                                    values['grouping'],
-                                   values['out_file'])
+                                   values['out_file'],
+                                   values['LZ'])
             window['out_message'].update(message)
         elif event == "source_file":
             window['out_file'].update(get_folder(values['source_file']))
