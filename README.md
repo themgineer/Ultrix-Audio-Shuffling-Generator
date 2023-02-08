@@ -11,6 +11,7 @@ The GUI interface is pretty simple. It asks for a source list filename, a number
 - **Source List:** Enter or Browse to the file path of a txt or csv file that contains the data you wish to use.
 - **Audio Channels:** Choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
 - **Audio Grouping:** Choose how you want the audio channels grouped (**Mono**, **Stereo**, **Quad**, or **Octo**)
+- **Leading Zeroes** Decide if you want channel numbers 1-9 to be displayed with a leading zero (01-09)
 - **Output File:** Enter or Browse to the file path you wish your output csv file to have. This field will automatically update based on the file path entered in the **Source List** field.
 
 -----
@@ -21,7 +22,7 @@ Data can be input as a list of sources as a txt file or a table of source names 
 
 ### *List Input*
 
-If you have a list of input names, you can just put each name on a new line in a standard text file. The script will then output a csv of those names appended with audio channels numbers.
+If you have a list of input names, you can just put each name on a new line in a standard text file. The script will then output a csv of those names appended with audio channels numbers. If your list contains blank lines or lines beginning with a `#`, those will be ignored.
 
 Input File:
 
@@ -55,7 +56,9 @@ Source 4 CH16
 
 The CSV input will take a source name and an Ultrix input in the format `name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
 
-Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input to use.
+Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input on what slot to use.
+
+If your CSV input file includes a header, it will not be treated as a header. It will be processed the same as any other line.
 
 **This script assumes you have not changed your port labels from their default values.**
 
