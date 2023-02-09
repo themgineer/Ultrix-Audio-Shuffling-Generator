@@ -1,6 +1,6 @@
-# **Audio Breakaway Generator for Ultrix Database**
+# **Audio Shuffling Generator for Ultrix Database**
 
-This is a short, simple script that will take a list of source names and output a CSV of the audio breakouts.
+This is a short, simple script that will take a list of source names and output a CSV containing corresponding audio shuffling labels.
 
 The GUI interface is pretty simple. It asks for a source list filename, a number of audio channels, how you want your audio grouped, and an output filename. Once all of those are provided, just hit the `Go` button and it should provide a CSV file depending on the data structure of the input file. More on that below.
 
@@ -56,7 +56,7 @@ Source 4 CH16
 
 The CSV input will take a source name and an Ultrix input in the format `name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
 
-Notice that the CSV input does NOT include the Ultrix sdi or audio level information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input on what slot to use.
+Notice that the CSV input does NOT include the Ultrix channel information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input on what slot to use.
 
 If your CSV input file includes a header, it will not be treated as a header. It will be processed the same as any other line.
 
