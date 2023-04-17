@@ -1,4 +1,5 @@
 import os
+import sys
 import csv
 import PySimpleGUI as gui
 
@@ -15,9 +16,15 @@ class InvalidGroup(Exception):
     pass
 
 
-def icon_path(image):
-    root = os.path.dirname(__file__)
-    return os.path.join(root, image)
+def img_resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 # Function that runs if input file is detected as a list instead of a csv.
@@ -227,6 +234,8 @@ def get_folder(path):
 
 def main():
 
+    icon_path=img_resource_path("icon/Ultrix_U.ico")
+
     # GUI Theme
     gui.theme('reddit')
     gui.theme_background_color("#D9D6D1")
@@ -272,7 +281,7 @@ def main():
 
     # Create the GUI Window
     window = gui.Window('Ultrix Audio Shuffling Generator', layout,
-                        icon=icon_path("icon/Ultrix_U.ico"))
+                        icon=icon_path)
 
     # Read the content of the window
     while True:
