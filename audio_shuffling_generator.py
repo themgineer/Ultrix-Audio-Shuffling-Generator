@@ -21,6 +21,10 @@ class InvalidGroup(Exception):
     """Creates custom InvalidGroup Exception"""
 
 
+class UnknownError(Exception):
+    """Catches any other weird errors"""
+
+
 def img_resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -81,7 +85,7 @@ def run_as_dict(channels, group_step, sources, output, out_file):
             for j in range(1, channels + 1):
                 temp = [f"{i} CH{j}"]
                 temp.extend(["", ""])
-                for k in range(1, channels + 1):
+                for _ in range(1, channels + 1):
                     temp.append(f"{sources[i]}.audio.ch{j}")
                 temp_dict = dict(zip(fields, temp))
                 output.append(temp_dict)
@@ -90,7 +94,7 @@ def run_as_dict(channels, group_step, sources, output, out_file):
             for j in range(1, channels + 1, group_step):
                 temp = [f"{i} CH{j}-{j + (group_step - 1)}"]
                 temp.extend(["", ""])
-                for k in range(1, channels + 1, group_step):
+                for _ in range(1, channels + 1, group_step):
                     for m in range(j, j + group_step):
                         temp.append(f"{sources[i]}.audio.ch{m}")
                 temp_dict = dict(zip(fields, temp))
@@ -113,7 +117,7 @@ def run_as_dict_leading_zero(channels, group_step, sources, output, out_file):
             for j in range(1, channels + 1):
                 temp = [f"{i} CH{j:02d}"]
                 temp.extend(["", ""])
-                for k in range(1, channels + 1):
+                for _ in range(1, channels + 1):
                     temp.append(f"{sources[i]}.audio.ch{j}")
                 temp_dict = dict(zip(fields, temp))
                 output.append(temp_dict)
@@ -122,7 +126,7 @@ def run_as_dict_leading_zero(channels, group_step, sources, output, out_file):
             for j in range(1, channels + 1, group_step):
                 temp = [f"{i} CH{j:02d}-{j + (group_step - 1):02d}"]
                 temp.extend(["", ""])
-                for k in range(1, channels + 1, group_step):
+                for _ in range(1, channels + 1, group_step):
                     for m in range(j, j + group_step):
                         temp.append(f"{sources[i]}.audio.ch{m}")
                 temp_dict = dict(zip(fields, temp))
@@ -231,7 +235,7 @@ def process_file(source_list, channels, grouping, out_file, leading_zero):
 
             return return_list
 
-        except Exception:
+        except UnknownError:
             return "Unknown error occurred."
 
     except FileNotFoundError:
