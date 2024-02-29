@@ -139,6 +139,7 @@ def run_as_dict_leading_zero(channels, group_step, sources, output, out_file):
 
 def write_list(filename, output_list):
     """Function designed to output the list to a file."""
+
     with open(filename, 'w', encoding='UTF-8', newline='') as out:
         writer = csv.writer(out)
         writer.writerows(output_list)
@@ -147,6 +148,7 @@ def write_list(filename, output_list):
 
 def write_dict(out_file, out_dict, fields):
     """Function designed to generate csv that matches Ultrix database layout."""
+
     with open(out_file, 'w', encoding='UTF-8', newline='') as out:
         writer = csv.DictWriter(out, fieldnames=fields)
         writer.writeheader()
@@ -168,6 +170,7 @@ def get_filename(out_file):
 
 def process_file(source_list, channels, grouping, out_file, leading_zero):
     """Function that processes in the input file"""
+
     # Initialize output list
     output = []
     group_dict = {"Mono": 1, "Stereo": 2, "Quad": 4, "Octo": 8}
@@ -244,6 +247,7 @@ def process_file(source_list, channels, grouping, out_file, leading_zero):
 
 def get_folder(path):
     """Function that pulls the folder path from input file"""
+
     if path == "":
         out_path = ""
     else:
