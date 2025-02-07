@@ -6,8 +6,9 @@ for Audio Shuffling Sources for an Ross Video Ultrix.
 import os
 import sys
 import csv
-import PySimpleGUI as gui
-
+import tkinter as tk
+from tkinter import ttk
+from tkinter import font
 
 class OutputEmpty(Exception):
     """Creates custom OutputEmpty Exception"""
@@ -263,71 +264,113 @@ def main():
 
     icon_path = img_resource_path("icon/Ultrix_U.ico")
 
-    # GUI Theme
-    gui.theme('reddit')
-    gui.theme_background_color("#D9D6D1")
-    gui.theme_text_element_background_color("#D9D6D1")
-    gui.theme_input_background_color("#EFEFEF")
-    gui.theme_button_color((None, "#D42E12"))
+    # Create the main window
+    root = tk.Tk()
 
-    # GUI Layout
-    layout = [[gui.Text('Source List'),
-               gui.Input(key='source_file',
-                         enable_events=True,
-                         focus=True),
-               gui.FileBrowse()],
-              [gui.Text('Audio Channels'),
-               gui.Combo((2, 4, 8, 16),
-                         key='channels',
-                         default_value=16,
-                         readonly=True),
-               gui.Text('Audio Grouping',
-                        pad=((15, 0), (0, 0))),
-               gui.Combo(('Mono', 'Stereo', 'Quad', 'Octo'),
-                         key='grouping',
-                         default_value='Mono',
-                         readonly=True),
-               gui.Checkbox(text='Leading Zeroes',
-                            key='leading_zero',
-                            pad=((15, 0), (0, 0)),
-                            background_color='#D9D6D1',
-                            checkbox_color='#FFFFFF')],
-              [gui.HorizontalSeparator()],
-              [gui.Text('Output File'),
-               gui.Input(key='out_file'),
-               gui.FileBrowse()],
-              [gui.Column([[gui.Button('Go')]],
-                          element_justification='l'),
-               gui.Text(text='',
-                        key='out_message',
-                        justification='center',
-                        size=(30, 1),
-                        expand_x=True,),
-               gui.Column([[gui.Exit()]],
-                          element_justification='r')]]
+    default_font = font.nametofont("TkDefaultFont")
+    default_font.configure(family="Helvetica", size=10)
 
-    # Create the GUI Window
-    window = gui.Window('Ultrix Audio Shuffling Generator', layout,
-                        icon=icon_path)
+    # Set window title
+    root.title("Ultrix Audio Shuffling Generator")
 
-    # Read the content of the window
-    while True:
-        event, values = window.Read(timeout=5000)
+    # Set window icon (path to .ico file)
+    root.iconbitmap(icon_path)
 
-        if event == 'Exit' or event == gui.WIN_CLOSED:
-            break
-        elif event == 'Go':
-            message = process_file(values['source_file'],
-                                   values['channels'],
-                                   values['grouping'],
-                                   values['out_file'],
-                                   values['leading_zero'])
-            window['out_message'].update(message)
-        elif event == "source_file":
-            window['out_file'].update(get_folder(values['source_file']))
-        else:
-            window['out_message'].update('')
-    window.close()
+    # Source List widgets
+    source_list_label = tk.Label(root, text="Source List")
+    source_list_entry = tk.Entry(root)
+    source_list_button = tk.Button(root, text="Browse")
+
+    source_list_label.grid(row=0, column=0)
+    source_list_entry.grid(row=0, column=1)
+    source_list_button.grid(row=0, column=2)
+
+    # Audio Channels widgets
+    aud_channels = tk.Label(root, text="Audio Channels")
+    aud_channels_options = (2, 4, 8, 16)
+    aud_channels_combo = ttk.Combobox(root, values=aud_channels_options, state="readonly")
+    aud_channels_combo.set(16)
+
+    aud_channels.grid(row=1, column=0)
+    aud_channels_combo.grid(row=1, column=1)
+
+    # Audio Grouping widgets
+    aud_grouping = tk.Label(root, text="Audio Grouping")
+    aud_grouping_options = ("Mono", "Stereo", "Quad", "Octo")
+    aud_grouping_combo = ttk.Combobox(root, values=aud_grouping_options, state="readonly")
+    aud_grouping_combo.set("Mono")
+
+    aud_grouping.grid(row=1, column=2)
+    aud_grouping_combo.grid(row=1, column=3)
+
+    # Start the GUI event loop
+    root.mainloop()
+
+    # # GUI Theme
+    # gui.theme('reddit')
+    # gui.theme_background_color("#D9D6D1")
+    # gui.theme_text_element_background_color("#D9D6D1")
+    # gui.theme_input_background_color("#EFEFEF")
+    # gui.theme_button_color((None, "#D42E12"))
+
+    # # GUI Layout
+    # layout = [[gui.Text('Source List'),
+    #            gui.Input(key='source_file',
+    #                      enable_events=True,
+    #                      focus=True),
+    #            gui.FileBrowse()],
+    #           [gui.Text('Audio Channels'),
+    #            gui.Combo((2, 4, 8, 16),
+    #                      key='channels',
+    #                      default_value=16,
+    #                      readonly=True),
+    #            gui.Text('Audio Grouping',
+    #                     pad=((15, 0), (0, 0))),
+    #            gui.Combo(('Mono', 'Stereo', 'Quad', 'Octo'),
+    #                      key='grouping',
+    #                      default_value='Mono',
+    #                      readonly=True),
+    #            gui.Checkbox(text='Leading Zeroes',
+    #                         key='leading_zero',
+    #                         pad=((15, 0), (0, 0)),
+    #                         background_color='#D9D6D1',
+    #                         checkbox_color='#FFFFFF')],
+    #           [gui.HorizontalSeparator()],
+    #           [gui.Text('Output File'),
+    #            gui.Input(key='out_file'),
+    #            gui.FileBrowse()],
+    #           [gui.Column([[gui.Button('Go')]],
+    #                       element_justification='l'),
+    #            gui.Text(text='',
+    #                     key='out_message',
+    #                     justification='center',
+    #                     size=(30, 1),
+    #                     expand_x=True,),
+    #            gui.Column([[gui.Exit()]],
+    #                       element_justification='r')]]
+
+    # # Create the GUI Window
+    # window = gui.Window('Ultrix Audio Shuffling Generator', layout,
+    #                     icon=icon_path)
+
+    # # Read the content of the window
+    # while True:
+    #     event, values = window.Read(timeout=5000)
+
+    #     if event == 'Exit' or event == gui.WIN_CLOSED:
+    #         break
+    #     elif event == 'Go':
+    #         message = process_file(values['source_file'],
+    #                                values['channels'],
+    #                                values['grouping'],
+    #                                values['out_file'],
+    #                                values['leading_zero'])
+    #         window['out_message'].update(message)
+    #     elif event == "source_file":
+    #         window['out_file'].update(get_folder(values['source_file']))
+    #     else:
+    #         window['out_message'].update('')
+    # window.close()
 
 
 if __name__ == '__main__':
