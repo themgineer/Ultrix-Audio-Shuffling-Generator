@@ -4,11 +4,20 @@ for Audio Shuffling Sources for a Ross Video Ultrix.
 """
 
 import os
-import sys
 import csv
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog as fd
+
+basedir = os.path.dirname(__file__)
+
+try:
+    from ctypes import windll  # Only exists on Windows.
+
+    myappid = "themgineer.audio_shuffling_generator.0.0.5"
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+except ImportError:
+    pass
 
 class OutputEmpty(Exception):
     """Creates custom OutputEmpty Exception"""
@@ -24,18 +33,6 @@ class InvalidGroup(Exception):
 
 class UnknownError(Exception):
     """Catches any other weird errors"""
-
-
-def img_resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
-
 
 # Function that runs if input file is detected as a list instead of a csv.
 # It recurses through the sources list and appends the channel number to it.
@@ -293,8 +290,6 @@ def main():
                                leading_zero.get())
         status_message.set(message)
 
-    icon_path = img_resource_path("icon/Ultrix_U.ico")
-
     # Create the main window
     root = tk.Tk()
     root.minsize(width=475, height=150)
@@ -311,7 +306,7 @@ def main():
     root.title("Ultrix Audio Shuffling Generator")
 
     # Set window icon (path to .ico file)
-    root.iconbitmap(icon_path)
+    root.iconbitmap(os.path.join(basedir, "icon/Ultrix_U.ico"))
 
     # Grid Config
     root.columnconfigure(0, weight=1)
@@ -358,13 +353,10 @@ def main():
                                    textvariable=grouping)
 
     leading_zero_check = ttk.Checkbutton(audio_frame,
+                                         text="Leading Zeroes",
                                          offvalue=False,
                                          onvalue=True,
-                                         variable=leading_zero,
-                                         padding=0)
-    leading_zero_lbl = ttk.Label(audio_frame,
-                                 text="Leading Zeroes")
-
+                                         variable=leading_zero)
     aud_spacer1 = ttk.Label(audio_frame, text="")
     aud_spacer2 = ttk.Label(audio_frame, text="")
 
@@ -415,7 +407,6 @@ def main():
     aud_spacer2.grid(row=0, column=5, padx=10, sticky="ew")
 
     leading_zero_check.grid(row=0, column=6)
-    leading_zero_lbl.grid(row=0, column=7)
 
     output_lbl.grid(row=0, column=0)
     output_entry.grid(row=0, column=1, sticky="ew", padx=5)
