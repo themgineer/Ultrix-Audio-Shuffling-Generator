@@ -14,8 +14,8 @@ basedir = os.path.dirname(__file__)
 try:
     from ctypes import windll  # Only exists on Windows.
 
-    myappid = "themgineer.audio_shuffling_generator.0.0.6"
-    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    MYAPPID = "themgineer.audio_shuffling_generator.0.0.6"
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(MYAPPID)
 except ImportError:
     pass
 
@@ -34,11 +34,70 @@ class InvalidGroup(Exception):
 class UnknownError(Exception):
     """Catches any other weird errors"""
 
+def process_names(names, channels, group_step, leading_zero):
+    """ Creates a list of names with channel numbers appended """
+
+    output = []
+
+    if leading_zero:
+        if group_step == 1:
+            for i in names:
+                for j in range(1, channels + 1):
+                    output.append(f"{i} CH{j:02d}")
+        else:
+            for i in names:
+                for j in range(1, channels + 1, group_step):
+                    output.append(f"{i} CH{j:02d}-{j+(group_step - 1):02d}")
+    else:
+        if group_step == 1:
+            for i in names:
+                for j in range(1, channels + 1):
+                    output.append(f"{i} CH{j}")
+        else:
+            for i in names:
+                for j in range(1, channels + 1, group_step):
+                    output.append(f"{i} CH{j}-{j+(group_step - 1)}")
+
+    return output
+
+def process_ports(ports, channels, group_step):
+    """ Creates a list of lists with channel ports """
+
+    output = []
+
+    if group_step == 1:
+        for i in ports:
+            for j in range(1, channels + 1):
+                temp = []
+                for _ in range(1, channels + 1):
+                    temp.append(f"{i}.audio.ch{j}")
+                output.append(temp)
+    else:
+        for i in ports:
+            for j in range(1, channels + 1, group_step):
+                temp = []
+                for _ in range(1, channels + 1, group_step):
+                    for m in range(j, j + group_step):
+                        temp.append(f"{i}.audio.ch{m}")
+                output.append(temp)
+    return output
+
+def create_new_rows(names, ports, index):
+    """ Creates rows to add to Excel sheet """
+    output = []
+
+    for i, name in enumerate(names):
+        temp = [index, name, "", "", ""]
+        temp.extend(ports[i])
+        output.append(temp)
+        index += 1
+
+    return output
+
 def process_file(source_file, end_id, channels, grouping, output_file, leading_zero):
     """Processes source file and settings"""
-    
+
     # Initialize lists
-    output = []
     names = []
     ports = []
 
@@ -51,24 +110,39 @@ def process_file(source_file, end_id, channels, grouping, output_file, leading_z
         else:
             raise InvalidGroup()
 
-        if group_step > channels:
-            group_step = channels
-        
+        group_step = min(group_step, channels)
+
         if source_file == "" or source_file is None:
             raise InputEmpty()
-        elif output_file == "" or output_file is None:
+
+        if output_file == "" or output_file is None:
             raise OutputEmpty()
-        
+
         wb = load_workbook(source_file)
         ws = wb["sources"]
 
-        for row in ws.iter_rows(min_row=2, max_row=end_id + 2, min_col=2, max_col=5, values_only = True):
+        for row in ws.iter_rows(min_row=2,
+                                max_row=end_id + 2,
+                                min_col=2,
+                                max_col=5,
+                                values_only = True):
             names.append(row[0])
             ports.append(row[3][:-8])
-        
-        print(names)
-        print(ports)
-    
+
+        starting_index = ws['A'][-1].value + 1
+
+        shuffled_names = process_names(names, channels, group_step, leading_zero)
+        shuffled_ports = process_ports(ports, channels, group_step)
+
+        new_rows = create_new_rows(shuffled_names, shuffled_ports, starting_index)
+
+        for row in new_rows:
+            ws.append(row)
+
+        wb.save(output_file)
+
+        return "Output successful!"
+
     except InvalidGroup:
         return "Invalid Audio Group Selection"
     except InputEmpty:
@@ -108,13 +182,13 @@ def main():
             filename = f.name
         else:
             filename = ""
-        
+
         source_entry.delete(0, tk.END)
         output_entry.delete(0, tk.END)
         source_entry.insert(0, filename)
         output_entry.insert(0, get_folder(filename))
 
-    def update_output(event=None):
+    def update_output():
         output_entry.delete(0, tk.END)
         output_entry.insert(0, get_folder(source_file.get()))
 
@@ -126,10 +200,14 @@ def main():
                                output_file.get(),
                                leading_zero.get())
         status_message.set(message)
+        status_lbl.after(5000, status_clear)
+
+    def status_clear():
+        status_message.set("")
 
     # Create the main window
     root = tk.Tk()
-    root.minsize(width=550, height=150)
+    root.minsize(width=600, height=150)
     root.resizable(True, False)
 
     leading_zero = tk.BooleanVar(value=False)
@@ -172,14 +250,13 @@ def main():
     source_browse = ttk.Button(source_frame,
                                text = "Browse",
                                command=select_source_file)
-    src_spacer = ttk.Label(source_frame, text="")
-    end_id_lbl = ttk.Label(source_frame, 
-                           text = "End ID")
-    end_id_entry = ttk.Entry(source_frame, 
-                             textvariable=end_id, 
-                             width=5)
 
-    # Audio widgets
+    # Configuration widgets
+    end_id_lbl = ttk.Label(audio_frame,
+                           text = "End ID")
+    end_id_entry = ttk.Entry(audio_frame,
+                             textvariable=end_id,
+                             width=5)
     aud_ch_lbl = ttk.Label(audio_frame,
                            text="Audio Channels")
     aud_ch_combo = ttk.Combobox(audio_frame,
@@ -203,6 +280,7 @@ def main():
                                          variable=leading_zero)
     aud_spacer1 = ttk.Label(audio_frame, text="")
     aud_spacer2 = ttk.Label(audio_frame, text="")
+    aud_spacer3 = ttk.Label(audio_frame, text="")
 
     # Separator
     separator = ttk.Separator(root, orient="horizontal")
@@ -239,21 +317,23 @@ def main():
     source_lbl.grid(row=0, column=0)
     source_entry.grid(row=0, column=1, sticky="ew", padx=5)
     source_browse.grid(row=0, column=2)
-    src_spacer.grid(row=0, column=3, padx=10, sticky="ew")
-    end_id_lbl.grid(row=0, column=4)
-    end_id_entry.grid(row=0, column=5, padx=5)
 
-    aud_ch_lbl.grid(row=0, column=0)
-    aud_ch_combo.grid(row=0, column=1, padx=5)
+    end_id_lbl.grid(row=0, column=0)
+    end_id_entry.grid(row=0, column=1, padx=5)
 
     aud_spacer1.grid(row=0, column=2, padx=10, sticky="ew")
 
-    aud_group_lbl.grid(row=0, column=3)
-    aud_group_combo.grid(row=0, column=4, padx=5)
+    aud_ch_lbl.grid(row=0, column=3)
+    aud_ch_combo.grid(row=0, column=4, padx=5)
 
     aud_spacer2.grid(row=0, column=5, padx=10, sticky="ew")
 
-    leading_zero_check.grid(row=0, column=6)
+    aud_group_lbl.grid(row=0, column=6)
+    aud_group_combo.grid(row=0, column=7, padx=5)
+
+    aud_spacer3.grid(row=0, column=8, padx=10, sticky="ew")
+
+    leading_zero_check.grid(row=0, column=9)
 
     output_lbl.grid(row=0, column=0)
     output_entry.grid(row=0, column=1, sticky="ew", padx=5)
