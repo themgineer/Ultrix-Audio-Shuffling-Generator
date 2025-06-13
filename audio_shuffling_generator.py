@@ -3,8 +3,8 @@ This creates a GUI that will easily generate names and port labels
 for Audio Shuffling Sources for a Ross Video Ultrix.
 """
 
+from openpyxl import load_workbook
 import os
-import csv
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog as fd
@@ -14,7 +14,7 @@ basedir = os.path.dirname(__file__)
 try:
     from ctypes import windll  # Only exists on Windows.
 
-    myappid = "themgineer.audio_shuffling_generator.0.0.5"
+    myappid = "themgineer.audio_shuffling_generator.0.0.6"
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 except ImportError:
     pass
@@ -34,214 +34,51 @@ class InvalidGroup(Exception):
 class UnknownError(Exception):
     """Catches any other weird errors"""
 
-# Function that runs if input file is detected as a list instead of a csv.
-# It recurses through the sources list and appends the channel number to it.
-def run_as_list(channels, group_step, sources, output, out_file):
-    """"Processes input file as a list of names."""
-
-    if group_step == 1:
-        for i in sources:
-            for j in range(1, channels + 1):
-                output.append([f"{i} CH{j}"])
-    else:
-        for i in sources:
-            for j in range(1, channels + 1, group_step):
-                output.append([f"{i} CH{j}-{j+(group_step - 1)}"])
-
-    out_file = get_filename(out_file)
-
-    return write_list(out_file, output)
-
-
-def run_as_list_leading_zero(channels, group_step, sources, output, out_file):
-    """"Processes input file as a list with leading zeroes"""
-
-    if group_step == 1:
-        for i in sources:
-            for j in range(1, channels + 1):
-                output.append([f"{i} CH{j:02d}"])
-    else:
-        for i in sources:
-            for j in range(1, channels + 1, group_step):
-                output.append([f"{i} CH{j:02d}-{j+(group_step - 1):02d}"])
-
-    out_file = get_filename(out_file)
-
-    return write_list(out_file, output)
-
-
-# Function that runs if input file is detected as a csv instead of a list.
-def run_as_dict(channels, group_step, sources, output, out_file):
-    """Processes input file as a CSV"""
-
-    fields = ["Name", "Description", "Video"]
-    for f in range(1, channels+1):
-        fields.append(f"Audio {f}")
-
-    if group_step == 1:
-        for i in sources:
-            for j in range(1, channels + 1):
-                temp = [f"{i} CH{j}"]
-                temp.extend(["", ""])
-                for _ in range(1, channels + 1):
-                    temp.append(f"{sources[i]}.audio.ch{j}")
-                temp_dict = dict(zip(fields, temp))
-                output.append(temp_dict)
-    else:
-        for i in sources:
-            for j in range(1, channels + 1, group_step):
-                temp = [f"{i} CH{j}-{j + (group_step - 1)}"]
-                temp.extend(["", ""])
-                for _ in range(1, channels + 1, group_step):
-                    for m in range(j, j + group_step):
-                        temp.append(f"{sources[i]}.audio.ch{m}")
-                temp_dict = dict(zip(fields, temp))
-                output.append(temp_dict)
-
-    out_file = get_filename(out_file)
-
-    return write_dict(out_file, output, fields)
-
-
-def run_as_dict_leading_zero(channels, group_step, sources, output, out_file):
-    """Processes input file as CSV with leading zeroes"""
-
-    fields = ["Name", "Description", "Video"]
-    for f in range(1, channels+1):
-        fields.append(f"Audio {f}")
-
-    if group_step == 1:
-        for i in sources:
-            for j in range(1, channels + 1):
-                temp = [f"{i} CH{j:02d}"]
-                temp.extend(["", ""])
-                for _ in range(1, channels + 1):
-                    temp.append(f"{sources[i]}.audio.ch{j}")
-                temp_dict = dict(zip(fields, temp))
-                output.append(temp_dict)
-    else:
-        for i in sources:
-            for j in range(1, channels + 1, group_step):
-                temp = [f"{i} CH{j:02d}-{j + (group_step - 1):02d}"]
-                temp.extend(["", ""])
-                for _ in range(1, channels + 1, group_step):
-                    for m in range(j, j + group_step):
-                        temp.append(f"{sources[i]}.audio.ch{m}")
-                temp_dict = dict(zip(fields, temp))
-                output.append(temp_dict)
-
-    out_file = get_filename(out_file)
-
-    return write_dict(out_file, output, fields)
-
-
-def write_list(filename, output_list):
-    """Function designed to output the list to a file."""
-
-    with open(filename, 'w', encoding='UTF-8', newline='') as out:
-        writer = csv.writer(out)
-        writer.writerows(output_list)
-    return "Output successful!"
-
-
-def write_dict(out_file, out_dict, fields):
-    """Function designed to generate csv that matches Ultrix database layout."""
-
-    with open(out_file, 'w', encoding='UTF-8', newline='') as out:
-        writer = csv.DictWriter(out, fieldnames=fields)
-        writer.writeheader()
-        writer.writerows(out_dict)
-    return "Output successful!"
-
-
-def get_filename(out_file):
-    """
-    Function that checks if an output path or filename was provided.
-    If not, uses default 'shuffled_audio.csv'.
-    """
-
-    if out_file.split(".")[-1] != "csv":
-        out_file += ".csv"
-
-    return out_file
-
-
-def process_file(source_list, channels, grouping, out_file, leading_zero):
-    """Function that processes in the input file"""
-
-    # Initialize output list
+def process_file(source_file, end_id, channels, grouping, output_file, leading_zero):
+    """Processes source file and settings"""
+    
+    # Initialize lists
     output = []
+    names = []
+    ports = []
+
+    # Set up audio channel grouping
     group_dict = {"Mono": 1, "Stereo": 2, "Quad": 4, "Octo": 8}
 
-    if grouping in group_dict:
-        group_step = group_dict[grouping]
-    else:
-        raise InvalidGroup()
-
-    if group_step > channels:
-        group_step = channels
-
-    # Main function that attempts to parse an input list or csv.
-    # If it finds a path or filename, it uses it and attempts to process it.
-    # If it doesn't find a path or filename,
-    # it will attempt to use 'sources.txt', but will fail if it cannot find it.
-
     try:
-        if source_list == "" or source_list is None:
-            raise InputEmpty()
-        elif out_file == "" or out_file is None:
-            raise OutputEmpty()
-
-        sources = {}
-        with open(source_list, mode='r', encoding='UTF-8') as src:
-            read = csv.reader(src)
-            sources = {rows[0]: rows[1] for rows in read}
-
-        if leading_zero:
-            dict_return = run_as_dict_leading_zero(
-                channels, group_step, sources, output, out_file)
+        if grouping in group_dict:
+            group_step = group_dict[grouping]
         else:
-            dict_return = run_as_dict(
-                channels, group_step, sources, output, out_file)
-        return dict_return
+            raise InvalidGroup()
 
+        if group_step > channels:
+            group_step = channels
+        
+        if source_file == "" or source_file is None:
+            raise InputEmpty()
+        elif output_file == "" or output_file is None:
+            raise OutputEmpty()
+        
+        wb = load_workbook(source_file)
+        ws = wb["sources"]
+
+        for row in ws.iter_rows(min_row=2, max_row=end_id + 2, min_col=2, max_col=5, values_only = True):
+            names.append(row[0])
+            ports.append(row[3][:-8])
+        
+        print(names)
+        print(ports)
+    
     except InvalidGroup:
-        return "Invalid Audio Grouping Selection"
+        return "Invalid Audio Group Selection"
     except InputEmpty:
         return "Source list needs a name."
     except OutputEmpty:
         return "Output file needs a name."
-    except IndexError:
-        try:
-            sources = []
-
-            with open(source_list, mode='r', encoding='UTF-8') as src:
-                for line in src:
-                    if line[0] == '\n' or line[0] == '#':
-                        continue
-                    sources.append(line.strip())
-
-            if leading_zero:
-                return_list = run_as_list_leading_zero(channels,
-                                                       group_step,
-                                                       sources,
-                                                       output,
-                                                       out_file)
-            else:
-                return_list = run_as_list(channels,
-                                          group_step,
-                                          sources,
-                                          output,
-                                          out_file)
-
-            return return_list
-
-        except UnknownError:
-            return "Unknown error occurred."
-
     except FileNotFoundError:
         return "Input file cannot be found."
-
+    except UnknownError:
+        return "Unknown error occurred."
 
 def get_folder(path):
     """Function that pulls the folder path from input file"""
@@ -250,7 +87,7 @@ def get_folder(path):
         out_path = ""
     else:
         path_list = path.split("/")
-        path_list[-1] = f"{path_list[-1].split('.')[0]}_shuffled.csv"
+        path_list[-1] = f"{path_list[-1].split('.')[0]}_shuffled.xlsx"
         out_path = "/".join(path_list)
 
     return out_path
@@ -260,8 +97,7 @@ def main():
 
     def select_source_file():
         # Specify file types
-        filetype_list = (('csv files', '*.csv'),
-                         ('text files', '*.txt'),
+        filetype_list = (('Excel files', '*.xlsx'),
                          ('All files', '*.*'))
 
         # Create and open file selection dialog
@@ -284,6 +120,7 @@ def main():
 
     def press_go():
         message = process_file(source_file.get(),
+                               end_id.get(),
                                channels.get(),
                                grouping.get(),
                                output_file.get(),
@@ -292,7 +129,7 @@ def main():
 
     # Create the main window
     root = tk.Tk()
-    root.minsize(width=475, height=150)
+    root.minsize(width=550, height=150)
     root.resizable(True, False)
 
     leading_zero = tk.BooleanVar(value=False)
@@ -301,6 +138,7 @@ def main():
     channels = tk.IntVar(value=16)
     grouping = tk.StringVar(value="Mono")
     status_message = tk.StringVar(value="")
+    end_id = tk.IntVar(value=0)
 
     # Set window title
     root.title("Ultrix Audio Shuffling Generator")
@@ -334,6 +172,12 @@ def main():
     source_browse = ttk.Button(source_frame,
                                text = "Browse",
                                command=select_source_file)
+    src_spacer = ttk.Label(source_frame, text="")
+    end_id_lbl = ttk.Label(source_frame, 
+                           text = "End ID")
+    end_id_entry = ttk.Entry(source_frame, 
+                             textvariable=end_id, 
+                             width=5)
 
     # Audio widgets
     aud_ch_lbl = ttk.Label(audio_frame,
@@ -395,6 +239,9 @@ def main():
     source_lbl.grid(row=0, column=0)
     source_entry.grid(row=0, column=1, sticky="ew", padx=5)
     source_browse.grid(row=0, column=2)
+    src_spacer.grid(row=0, column=3, padx=10, sticky="ew")
+    end_id_lbl.grid(row=0, column=4)
+    end_id_entry.grid(row=0, column=5, padx=5)
 
     aud_ch_lbl.grid(row=0, column=0)
     aud_ch_combo.grid(row=0, column=1, padx=5)
