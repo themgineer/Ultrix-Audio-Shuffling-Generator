@@ -65,21 +65,13 @@ def process_ports(ports, channels, group_step):
 
     output = []
 
-    if group_step == 1:
-        for i in ports:
-            for j in range(1, channels + 1):
-                temp = []
-                for _ in range(1, channels + 1):
-                    temp.append(f"{i}.audio.ch{j}")
-                output.append(temp)
-    else:
-        for i in ports:
-            for j in range(1, channels + 1, group_step):
-                temp = []
-                for _ in range(1, channels + 1, group_step):
-                    for m in range(j, j + group_step):
-                        temp.append(f"{i}.audio.ch{m}")
-                output.append(temp)
+    for port in ports:
+        for ch_range in range(1, channels + 1, group_step):
+            temp = []
+            for _ in range(1, channels + 1, group_step):
+                for ch in range(ch_range, ch_range + group_step):
+                    temp.append(f"{port}.audio.ch{ch}")
+            output.append(temp)
     return output
 
 def create_new_rows(names, ports, index):
@@ -151,6 +143,8 @@ def process_file(source_file, end_id, channels, grouping, output_file, leading_z
         return "Output file needs a name."
     except FileNotFoundError:
         return "Input file cannot be found."
+    except PermissionError:
+        return "Permission Denied: Excel file may still be open."
     except UnknownError:
         return "Unknown error occurred."
 
