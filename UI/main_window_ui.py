@@ -192,7 +192,7 @@ class Ui_mw_main(object):
         mw_main.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_main)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 702, 33))
+        self.menubar.setGeometry(QRect(0, 0, 700, 33))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         mw_main.setMenuBar(self.menubar)
