@@ -124,9 +124,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             if self.le_sourceFile.text():
                 last_source = self.ws['B'][self.sb_index.value() + 1].value
                 self.statusbar.showMessage(f"Last source: {last_source}")
-        except Exception as e:
-            if type(e).__name__ == "TypeError":
-                self.statusbar.showMessage("Invalid index")
+        except TypeError:
+            self.statusbar.showMessage("Invalid index")
 
     @QtCore.Slot()
     def process_file(self):
