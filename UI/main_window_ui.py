@@ -27,7 +27,7 @@ class Ui_mw_main(object):
     def setupUi(self, mw_main):
         if not mw_main.objectName():
             mw_main.setObjectName(u"mw_main")
-        mw_main.resize(702, 225)
+        mw_main.resize(700, 225)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -58,22 +58,9 @@ class Ui_mw_main(object):
         self.gridLayout_2.setHorizontalSpacing(5)
         self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setContentsMargins(5, 0, 5, 0)
-        self.pb_go = QPushButton(self.centralwidget)
-        self.pb_go.setObjectName(u"pb_go")
-        sizePolicy.setHeightForWidth(self.pb_go.sizePolicy().hasHeightForWidth())
-        self.pb_go.setSizePolicy(sizePolicy)
-        self.pb_go.setMinimumSize(QSize(75, 0))
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout_2.addWidget(self.pb_go, 2, 1, 1, 1)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer, 2, 3, 1, 1)
-
-        self.pb_quit = QPushButton(self.centralwidget)
-        self.pb_quit.setObjectName(u"pb_quit")
-
-        self.gridLayout_2.addWidget(self.pb_quit, 2, 2, 1, 1)
+        self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 3, 1, 1)
 
         self.widget = QWidget(self.centralwidget)
         self.widget.setObjectName(u"widget")
@@ -97,8 +84,9 @@ class Ui_mw_main(object):
         self.cb_channels.setObjectName(u"cb_channels")
         sizePolicy.setHeightForWidth(self.cb_channels.sizePolicy().hasHeightForWidth())
         self.cb_channels.setSizePolicy(sizePolicy)
-        self.cb_channels.setMinimumSize(QSize(0, 0))
-        self.cb_channels.setMaximumSize(QSize(55, 16777215))
+        self.cb_channels.setMinimumSize(QSize(40, 0))
+        self.cb_channels.setMaximumSize(QSize(16777215, 16777215))
+        self.cb_channels.setBaseSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.cb_channels, 1, 4, 1, 1)
 
@@ -161,6 +149,7 @@ class Ui_mw_main(object):
 
         self.le_sourceFile = QLineEdit(self.widget)
         self.le_sourceFile.setObjectName(u"le_sourceFile")
+        self.le_sourceFile.setClearButtonEnabled(False)
 
         self.gridLayout.addWidget(self.le_sourceFile, 0, 1, 1, 8)
 
@@ -187,12 +176,26 @@ class Ui_mw_main(object):
         self.gridLayout.addWidget(self.line, 3, 0, 1, 10)
 
 
-        self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 4)
+        self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 5)
+
+        self.pb_quit = QPushButton(self.centralwidget)
+        self.pb_quit.setObjectName(u"pb_quit")
+        self.pb_quit.setMinimumSize(QSize(100, 0))
+
+        self.gridLayout_2.addWidget(self.pb_quit, 2, 2, 1, 1)
+
+        self.pb_go = QPushButton(self.centralwidget)
+        self.pb_go.setObjectName(u"pb_go")
+        sizePolicy.setHeightForWidth(self.pb_go.sizePolicy().hasHeightForWidth())
+        self.pb_go.setSizePolicy(sizePolicy)
+        self.pb_go.setMinimumSize(QSize(100, 0))
+
+        self.gridLayout_2.addWidget(self.pb_go, 2, 1, 1, 1)
 
         mw_main.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_main)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 702, 33))
+        self.menubar.setGeometry(QRect(0, 0, 700, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         mw_main.setMenuBar(self.menubar)
@@ -233,15 +236,19 @@ class Ui_mw_main(object):
 #if QT_CONFIG(shortcut)
         self.action_shuffle.setShortcut(QCoreApplication.translate("mw_main", u"Ctrl+S", None))
 #endif // QT_CONFIG(shortcut)
-        self.pb_go.setText(QCoreApplication.translate("mw_main", u"&Shuffle", None))
-        self.pb_quit.setText(QCoreApplication.translate("mw_main", u"Quit", None))
         self.label.setText(QCoreApplication.translate("mw_main", u"Source File", None))
         self.cb_channels.setItemText(0, QCoreApplication.translate("mw_main", u"16", None))
         self.cb_channels.setItemText(1, QCoreApplication.translate("mw_main", u"8", None))
         self.cb_channels.setItemText(2, QCoreApplication.translate("mw_main", u"4", None))
         self.cb_channels.setItemText(3, QCoreApplication.translate("mw_main", u"2", None))
 
+#if QT_CONFIG(tooltip)
+        self.label_4.setToolTip(QCoreApplication.translate("mw_main", u"Set how many audio channels are in the database.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_4.setText(QCoreApplication.translate("mw_main", u"Audio Channels", None))
+#if QT_CONFIG(tooltip)
+        self.pb_srcBrowse.setToolTip(QCoreApplication.translate("mw_main", u"Find source file exported from Ultrix Sources table.", None))
+#endif // QT_CONFIG(tooltip)
         self.pb_srcBrowse.setText(QCoreApplication.translate("mw_main", u"Browse", None))
         self.label_2.setText(QCoreApplication.translate("mw_main", u"Output File", None))
         self.cb_grouping.setItemText(0, QCoreApplication.translate("mw_main", u"Mono", None))
@@ -249,10 +256,30 @@ class Ui_mw_main(object):
         self.cb_grouping.setItemText(2, QCoreApplication.translate("mw_main", u"Quad", None))
         self.cb_grouping.setItemText(3, QCoreApplication.translate("mw_main", u"Octo", None))
 
+#if QT_CONFIG(tooltip)
+        self.ck_leadingZero.setToolTip(QCoreApplication.translate("mw_main", u"Check to enable leading zeroes on single digit numbers.", None))
+#endif // QT_CONFIG(tooltip)
         self.ck_leadingZero.setText(QCoreApplication.translate("mw_main", u"Leading Zero", None))
+#if QT_CONFIG(tooltip)
+        self.label_5.setToolTip(QCoreApplication.translate("mw_main", u"Set the index of the last source to use to generate audio sources.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("mw_main", u"End Index", None))
+#if QT_CONFIG(tooltip)
+        self.label_3.setToolTip(QCoreApplication.translate("mw_main", u"Set how you would like the audio to be grouped.", None))
+#endif // QT_CONFIG(tooltip)
         self.label_3.setText(QCoreApplication.translate("mw_main", u"Audio Grouping", None))
+#if QT_CONFIG(tooltip)
+        self.pb_outBrowse.setToolTip(QCoreApplication.translate("mw_main", u"Set or use autogenerated default file path for output file.", None))
+#endif // QT_CONFIG(tooltip)
         self.pb_outBrowse.setText(QCoreApplication.translate("mw_main", u"Browse", None))
+#if QT_CONFIG(tooltip)
+        self.pb_quit.setToolTip(QCoreApplication.translate("mw_main", u"Exit the application.", None))
+#endif // QT_CONFIG(tooltip)
+        self.pb_quit.setText(QCoreApplication.translate("mw_main", u"Quit", None))
+#if QT_CONFIG(tooltip)
+        self.pb_go.setToolTip(QCoreApplication.translate("mw_main", u"Generate audio shuffling sources based on options set above.", None))
+#endif // QT_CONFIG(tooltip)
+        self.pb_go.setText(QCoreApplication.translate("mw_main", u"&Shuffle", None))
         self.menuFile.setTitle(QCoreApplication.translate("mw_main", u"&File", None))
     # retranslateUi
 
