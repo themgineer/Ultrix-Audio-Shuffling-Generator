@@ -24,17 +24,12 @@ except ImportError:
 class OutputEmpty(Exception):
     """Creates custom OutputEmpty Exception"""
 
-
 class InputEmpty(Exception):
     """Creates custom InputEmpty Exception"""
 
-
-class InvalidGroup(Exception):
-    """Creates custom InvalidGroup Exception"""
-
-
 class UnknownError(Exception):
     """Catches any other weird errors"""
+
 
 class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
@@ -143,18 +138,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         group_dict = {"Mono": 1, "Stereo": 2, "Quad": 4, "Octo": 8}
 
         try:
-            if grouping in group_dict:
-                group_step = group_dict[grouping]
-            else:
-                raise InvalidGroup()
-
-            group_step = min(group_step, channels)
+            group_step = min(group_dict[grouping], channels)
 
             if source_file == "" or source_file is None:
                 raise InputEmpty()
 
             if output_file == "" or output_file is None:
                 raise OutputEmpty()
+            
+            if not Path(source_file).exists():
+                raise FileNotFoundError()
 
             for row in self.ws.iter_rows(min_row=2,
                                     max_row=end_id + 2,
