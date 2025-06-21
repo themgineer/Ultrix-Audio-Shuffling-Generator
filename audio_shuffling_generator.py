@@ -36,8 +36,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
     wb = Workbook()
     ws = worksheet
 
-    timer = QtCore.QTimer()
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -59,12 +57,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         self.action_shuffle.triggered.connect(self.process_file)
         self.pb_go.clicked.connect(self.process_file)
 
-        self.statusbar.messageChanged.connect(self.clear_timer_start)
-        self.timer.timeout.connect(self.statusbar.clearMessage)
-    
-    @QtCore.Slot()
-    def clear_timer_start(self):
-        self.timer.start(10000)
 
     @QtCore.Slot()
     def load_sheet(self, source_file):
@@ -77,7 +69,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
                 self.ws = self.wb["sources"]
             except Exception as e:
                 if type(e).__name__ == 'InvalidFileException':
-                    self.statusbar.showMessage("File not found.")
+                    self.show_status("File not found.")
 
 
     @QtCore.Slot()
@@ -118,9 +110,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         try:
             if self.le_sourceFile.text():
                 last_source = self.ws['B'][self.sb_index.value() + 1].value
-                self.statusbar.showMessage(f"Last source: {last_source}")
+                self.show_status(f"Last source: {last_source}")
         except TypeError:
-            self.statusbar.showMessage("Invalid index")
+            self.show_status("Invalid index")
 
     @QtCore.Slot()
     def process_file(self):
@@ -184,7 +176,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         except AttributeError:
             message = "Unknown error with input file."
         
-        self.statusbar.showMessage(message)
+        self.show_status(message)
 
     def process_names(self, names, channels, group_step, leading_zero):
         """ Creates a list of names with channel numbers appended """
@@ -237,6 +229,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             index += 1
 
         return output
+    
+    def show_status(self, message):
+        self.statusbar.showMessage(message, timeout=10000)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
