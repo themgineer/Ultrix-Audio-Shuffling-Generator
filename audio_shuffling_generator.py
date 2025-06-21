@@ -74,6 +74,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     @QtCore.Slot()
     def autofill_output(self):
+        """ Generates output file name based on source file name """
         if self.le_sourceFile.text() == "":
             self.le_outputFile.setText("")
         else:
@@ -83,6 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     @QtCore.Slot()
     def open_source_dialog(self):
+        """ Opens a file dialog for existing files """
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
             "Select a File",
@@ -95,6 +97,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     @QtCore.Slot()
     def open_dest_dialog(self):
+        """ Opens a file dialog for any files """
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
             self,
             "Select a File",
@@ -107,6 +110,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     @QtCore.Slot()
     def get_last_source_name(self):
+        """ Attempts to find the source name of the line matching the set index """
         try:
             if self.le_sourceFile.text():
                 last_source = self.ws['B'][self.sb_index.value() + 1].value
@@ -116,6 +120,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     @QtCore.Slot()
     def process_file(self):
+        """ Processes files """
         source_file = self.le_sourceFile.text()
         output_file = self.le_outputFile.text()
         end_id = self.sb_index.value()
@@ -128,16 +133,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         ports = []
 
         group_dict = {"Mono": 1, "Stereo": 2, "Quad": 4, "Octo": 8}
+        group_step = min(group_dict[grouping], channels)
 
         try:
-            group_step = min(group_dict[grouping], channels)
-
             if source_file == "" or source_file is None:
                 raise InputEmpty()
 
             if output_file == "" or output_file is None:
                 raise OutputEmpty()
-            
+
             if not Path(source_file).exists():
                 raise FileNotFoundError()
 
@@ -175,7 +179,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             message = "Unknown error occurred."
         except AttributeError:
             message = "Unknown error with input file."
-        
+
         self.show_status(message)
 
     def process_names(self, names, channels, group_step, leading_zero):
@@ -229,8 +233,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             index += 1
 
         return output
-    
+
     def show_status(self, message):
+        """ Simple function to update status bar message """
         self.statusbar.showMessage(message, timeout=10000)
 
 if __name__ == "__main__":
