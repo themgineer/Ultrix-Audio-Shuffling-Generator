@@ -67,6 +67,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             try:
                 self.wb = load_workbook(source_file)
                 self.ws = self.wb["sources"]
+                self.sb_index.setMaximum(self.ws["A"][-1].value)
             except Exception as e:
                 if type(e).__name__ == 'InvalidFileException':
                     self.show_status("File not found.")
@@ -117,6 +118,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
                 self.show_status(f"Last source: {last_source}")
         except TypeError:
             self.show_status("Invalid index")
+        except IndexError:
+            self.show_status("Index out of range")
 
     @QtCore.Slot()
     def process_file(self):
@@ -240,6 +243,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle("Fusion")
 
     window = MainWindow()
     window.show()
