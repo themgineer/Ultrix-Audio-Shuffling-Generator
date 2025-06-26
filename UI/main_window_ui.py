@@ -84,8 +84,8 @@ class Ui_mw_main(object):
         self.cb_channels.setObjectName(u"cb_channels")
         sizePolicy.setHeightForWidth(self.cb_channels.sizePolicy().hasHeightForWidth())
         self.cb_channels.setSizePolicy(sizePolicy)
-        self.cb_channels.setMinimumSize(QSize(40, 0))
-        self.cb_channels.setMaximumSize(QSize(16777215, 16777215))
+        self.cb_channels.setMinimumSize(QSize(50, 0))
+        self.cb_channels.setMaximumSize(QSize(50, 16777215))
         self.cb_channels.setBaseSize(QSize(0, 0))
 
         self.gridLayout.addWidget(self.cb_channels, 1, 4, 1, 1)
@@ -118,7 +118,8 @@ class Ui_mw_main(object):
         self.cb_grouping.setObjectName(u"cb_grouping")
         sizePolicy.setHeightForWidth(self.cb_grouping.sizePolicy().hasHeightForWidth())
         self.cb_grouping.setSizePolicy(sizePolicy)
-        self.cb_grouping.setMaximumSize(QSize(70, 16777215))
+        self.cb_grouping.setMinimumSize(QSize(75, 0))
+        self.cb_grouping.setMaximumSize(QSize(75, 16777215))
 
         self.gridLayout.addWidget(self.cb_grouping, 1, 7, 1, 1)
 
@@ -195,7 +196,7 @@ class Ui_mw_main(object):
         mw_main.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_main)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 702, 33))
+        self.menubar.setGeometry(QRect(0, 0, 700, 33))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         mw_main.setMenuBar(self.menubar)
