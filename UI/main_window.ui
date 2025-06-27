@@ -251,7 +251,7 @@
        <item row="1" column="1">
         <widget class="QSpinBox" name="sb_index">
          <property name="buttonSymbols">
-          <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+          <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
          </property>
          <property name="maximum">
           <number>287</number>
@@ -448,6 +448,48 @@
     <string>Ctrl+S</string>
    </property>
   </action>
+  <action name="actionLight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Light</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionDark">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dark</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionSystem">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>System</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>le_sourceFile</tabstop>
@@ -458,6 +500,8 @@
   <tabstop>ck_leadingZero</tabstop>
   <tabstop>le_outputFile</tabstop>
   <tabstop>pb_outBrowse</tabstop>
+  <tabstop>pb_go</tabstop>
+  <tabstop>pb_quit</tabstop>
  </tabstops>
  <resources>
   <include location="../Icons/icons.qrc"/>
