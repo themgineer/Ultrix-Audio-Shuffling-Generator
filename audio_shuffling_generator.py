@@ -239,7 +239,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     def show_status(self, message):
         """ Simple function to update status bar message """
-        self.statusbar.showMessage(message, timeout=10000)
+        self.statusbar.showMessage(message, timeout=5000)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
