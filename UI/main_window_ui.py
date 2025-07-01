@@ -136,12 +136,6 @@ class Ui_mw_main(object):
 
         self.gridLayout.addWidget(self.label_3, 3, 8, 1, 1)
 
-        self.label_4 = QLabel(self.widget)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout.addWidget(self.label_4, 3, 2, 1, 1)
-
         self.label = QLabel(self.widget)
         self.label.setObjectName(u"label")
         self.label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
@@ -248,9 +242,23 @@ class Ui_mw_main(object):
 
         self.ck_start_index = QCheckBox(self.widget)
         self.ck_start_index.setObjectName(u"ck_start_index")
-        self.ck_start_index.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.ck_start_index.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
         self.gridLayout.addWidget(self.ck_start_index, 1, 3, 1, 1)
+
+        self.label_4 = QLabel(self.widget)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout.addWidget(self.label_4, 3, 3, 1, 1)
+
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer_7, 3, 0, 1, 2)
+
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer_8, 3, 12, 1, 1)
 
 
         self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 5)
@@ -314,6 +322,9 @@ class Ui_mw_main(object):
         self.pb_quit.setToolTip(QCoreApplication.translate("mw_main", u"Exit the application.", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_quit.setText(QCoreApplication.translate("mw_main", u"Quit", None))
+#if QT_CONFIG(tooltip)
+        self.lb_start_index.setToolTip(QCoreApplication.translate("mw_main", u"Set the index of the first source to use to generate audio sources.", None))
+#endif // QT_CONFIG(tooltip)
         self.lb_start_index.setText(QCoreApplication.translate("mw_main", u"Start Index", None))
 #if QT_CONFIG(tooltip)
         self.pb_srcBrowse.setToolTip(QCoreApplication.translate("mw_main", u"Find source file exported from Ultrix Sources table.", None))
@@ -327,10 +338,6 @@ class Ui_mw_main(object):
         self.label_3.setToolTip(QCoreApplication.translate("mw_main", u"Set how you would like the audio to be grouped.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_3.setText(QCoreApplication.translate("mw_main", u"Grouping", None))
-#if QT_CONFIG(tooltip)
-        self.label_4.setToolTip(QCoreApplication.translate("mw_main", u"Set how many audio channels are in the database.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_4.setText(QCoreApplication.translate("mw_main", u"Channels", None))
         self.label.setText(QCoreApplication.translate("mw_main", u"Source File", None))
         self.cb_grouping.setItemText(0, QCoreApplication.translate("mw_main", u"Mono", None))
         self.cb_grouping.setItemText(1, QCoreApplication.translate("mw_main", u"Stereo", None))
@@ -352,6 +359,10 @@ class Ui_mw_main(object):
         self.pb_outBrowse.setText(QCoreApplication.translate("mw_main", u"Browse", None))
         self.label_2.setText(QCoreApplication.translate("mw_main", u"Output File", None))
         self.ck_start_index.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_4.setToolTip(QCoreApplication.translate("mw_main", u"Set how many audio channels are in the database.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_4.setText(QCoreApplication.translate("mw_main", u"Channels", None))
         self.menuFile.setTitle(QCoreApplication.translate("mw_main", u"&File", None))
     # retranslateUi
 
