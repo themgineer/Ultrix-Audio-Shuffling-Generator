@@ -48,6 +48,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         self.le_sourceFile.textChanged.connect(self.autofill_output)
         self.le_sourceFile.textChanged.connect(lambda: self.load_sheet(self.le_sourceFile.text()))
 
+        self.ck_start_index.checkStateChanged.connect(self.set_start_status)
         self.sb_start_index.valueChanged.connect(self.get_first_source_name)
         self.sb_end_index.valueChanged.connect(self.get_last_source_name)
 
@@ -72,7 +73,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             except Exception as e:
                 if type(e).__name__ == 'InvalidFileException':
                     self.show_status("File not found.")
-
 
     @QtCore.Slot()
     def autofill_output(self):
@@ -109,6 +109,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         if filename:
             path = Path(filename)
             self.le_outputFile.setText(str(path))
+
+    @QtCore.Slot()
+    def set_start_status(self):
+        """ Enables or disables Start Index based on state of checkbox """
+        if self.ck_start_index.isChecked():
+            self.lb_start_index.setEnabled(True)
+            self.sb_start_index.setEnabled(True)
+        else:
+            self.lb_start_index.setEnabled(False)
+            self.sb_start_index.setEnabled(False)
 
     @QtCore.Slot()
     def get_first_source_name(self):
