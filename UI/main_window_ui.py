@@ -27,14 +27,14 @@ class Ui_mw_main(object):
     def setupUi(self, mw_main):
         if not mw_main.objectName():
             mw_main.setObjectName(u"mw_main")
-        mw_main.resize(700, 225)
+        mw_main.resize(753, 240)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(mw_main.sizePolicy().hasHeightForWidth())
         mw_main.setSizePolicy(sizePolicy)
-        mw_main.setMinimumSize(QSize(700, 225))
-        mw_main.setMaximumSize(QSize(16777215, 225))
+        mw_main.setMinimumSize(QSize(700, 240))
+        mw_main.setMaximumSize(QSize(16777215, 240))
         mw_main.setSizeIncrement(QSize(0, 0))
         font = QFont()
         font.setPointSize(10)
@@ -70,7 +70,21 @@ class Ui_mw_main(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setHorizontalSpacing(5)
         self.gridLayout_2.setVerticalSpacing(0)
-        self.gridLayout_2.setContentsMargins(5, 0, 5, 0)
+        self.gridLayout_2.setContentsMargins(10, 0, 10, 0)
+        self.pb_go = QPushButton(self.centralwidget)
+        self.pb_go.setObjectName(u"pb_go")
+        sizePolicy.setHeightForWidth(self.pb_go.sizePolicy().hasHeightForWidth())
+        self.pb_go.setSizePolicy(sizePolicy)
+        self.pb_go.setMinimumSize(QSize(100, 0))
+
+        self.gridLayout_2.addWidget(self.pb_go, 2, 1, 1, 1)
+
+        self.pb_quit = QPushButton(self.centralwidget)
+        self.pb_quit.setObjectName(u"pb_quit")
+        self.pb_quit.setMinimumSize(QSize(100, 0))
+
+        self.gridLayout_2.addWidget(self.pb_quit, 2, 2, 1, 1)
+
         self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_2.addItem(self.horizontalSpacer_5, 2, 3, 1, 1)
@@ -83,11 +97,83 @@ class Ui_mw_main(object):
         self.gridLayout.setHorizontalSpacing(5)
         self.gridLayout.setVerticalSpacing(0)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.cb_grouping = QComboBox(self.widget)
+        self.cb_grouping.addItem("")
+        self.cb_grouping.addItem("")
+        self.cb_grouping.addItem("")
+        self.cb_grouping.addItem("")
+        self.cb_grouping.setObjectName(u"cb_grouping")
+        sizePolicy.setHeightForWidth(self.cb_grouping.sizePolicy().hasHeightForWidth())
+        self.cb_grouping.setSizePolicy(sizePolicy)
+        self.cb_grouping.setMinimumSize(QSize(75, 0))
+        self.cb_grouping.setMaximumSize(QSize(75, 16777215))
+
+        self.gridLayout.addWidget(self.cb_grouping, 3, 6, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer, 3, 4, 1, 1)
+
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer_6, 1, 8, 1, 2)
+
+        self.le_outputFile = QLineEdit(self.widget)
+        self.le_outputFile.setObjectName(u"le_outputFile")
+
+        self.gridLayout.addWidget(self.le_outputFile, 4, 1, 1, 8)
+
+        self.sb_start_index = QSpinBox(self.widget)
+        self.sb_start_index.setObjectName(u"sb_start_index")
+        sizePolicy.setHeightForWidth(self.sb_start_index.sizePolicy().hasHeightForWidth())
+        self.sb_start_index.setSizePolicy(sizePolicy)
+        self.sb_start_index.setMaximumSize(QSize(50, 16777215))
+        self.sb_start_index.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.sb_start_index.setMaximum(287)
+
+        self.gridLayout.addWidget(self.sb_start_index, 1, 4, 1, 1)
+
+        self.ck_leadingZero = QCheckBox(self.widget)
+        self.ck_leadingZero.setObjectName(u"ck_leadingZero")
+        self.ck_leadingZero.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+
+        self.gridLayout.addWidget(self.ck_leadingZero, 3, 8, 1, 1)
+
+        self.label_4 = QLabel(self.widget)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout.addWidget(self.label_4, 3, 2, 1, 1)
+
         self.label = QLabel(self.widget)
         self.label.setObjectName(u"label")
         self.label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+
+        self.sb_end_index = QSpinBox(self.widget)
+        self.sb_end_index.setObjectName(u"sb_end_index")
+        sizePolicy.setHeightForWidth(self.sb_end_index.sizePolicy().hasHeightForWidth())
+        self.sb_end_index.setSizePolicy(sizePolicy)
+        self.sb_end_index.setMaximumSize(QSize(50, 16777215))
+        self.sb_end_index.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.sb_end_index.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.sb_end_index.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.UpDownArrows)
+        self.sb_end_index.setMaximum(287)
+
+        self.gridLayout.addWidget(self.sb_end_index, 1, 7, 1, 1)
+
+        self.line = QFrame(self.widget)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout.addWidget(self.line, 5, 0, 1, 10)
+
+        self.pb_outBrowse = QPushButton(self.widget)
+        self.pb_outBrowse.setObjectName(u"pb_outBrowse")
+
+        self.gridLayout.addWidget(self.pb_outBrowse, 4, 9, 1, 1)
 
         self.cb_channels = QComboBox(self.widget)
         self.cb_channels.addItem("")
@@ -101,65 +187,33 @@ class Ui_mw_main(object):
         self.cb_channels.setMaximumSize(QSize(50, 16777215))
         self.cb_channels.setBaseSize(QSize(0, 0))
 
-        self.gridLayout.addWidget(self.cb_channels, 1, 4, 1, 1)
+        self.gridLayout.addWidget(self.cb_channels, 3, 3, 1, 1)
 
-        self.label_4 = QLabel(self.widget)
-        self.label_4.setObjectName(u"label_4")
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addWidget(self.label_4, 1, 3, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer_4, 1, 5, 1, 1)
 
-        self.pb_srcBrowse = QPushButton(self.widget)
-        self.pb_srcBrowse.setObjectName(u"pb_srcBrowse")
+        self.label_6 = QLabel(self.widget)
+        self.label_6.setObjectName(u"label_6")
 
-        self.gridLayout.addWidget(self.pb_srcBrowse, 0, 9, 1, 1)
+        self.gridLayout.addWidget(self.label_6, 1, 3, 1, 1)
+
+        self.label_3 = QLabel(self.widget)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout.addWidget(self.label_3, 3, 5, 1, 1)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer_3, 1, 0, 1, 3)
 
         self.label_2 = QLabel(self.widget)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout.addItem(self.horizontalSpacer_2, 1, 8, 1, 1)
-
-        self.cb_grouping = QComboBox(self.widget)
-        self.cb_grouping.addItem("")
-        self.cb_grouping.addItem("")
-        self.cb_grouping.addItem("")
-        self.cb_grouping.addItem("")
-        self.cb_grouping.setObjectName(u"cb_grouping")
-        sizePolicy.setHeightForWidth(self.cb_grouping.sizePolicy().hasHeightForWidth())
-        self.cb_grouping.setSizePolicy(sizePolicy)
-        self.cb_grouping.setMinimumSize(QSize(75, 0))
-        self.cb_grouping.setMaximumSize(QSize(75, 16777215))
-
-        self.gridLayout.addWidget(self.cb_grouping, 1, 7, 1, 1)
-
-        self.sb_index = QSpinBox(self.widget)
-        self.sb_index.setObjectName(u"sb_index")
-        self.sb_index.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.UpDownArrows)
-        self.sb_index.setMaximum(287)
-
-        self.gridLayout.addWidget(self.sb_index, 1, 1, 1, 1)
-
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout.addItem(self.horizontalSpacer_4, 1, 2, 1, 1)
-
-        self.ck_leadingZero = QCheckBox(self.widget)
-        self.ck_leadingZero.setObjectName(u"ck_leadingZero")
-
-        self.gridLayout.addWidget(self.ck_leadingZero, 1, 9, 1, 1)
-
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout.addItem(self.horizontalSpacer_3, 1, 5, 1, 1)
-
-        self.le_outputFile = QLineEdit(self.widget)
-        self.le_outputFile.setObjectName(u"le_outputFile")
-
-        self.gridLayout.addWidget(self.le_outputFile, 2, 1, 1, 8)
+        self.gridLayout.addWidget(self.label_2, 4, 0, 1, 1)
 
         self.le_sourceFile = QLineEdit(self.widget)
         self.le_sourceFile.setObjectName(u"le_sourceFile")
@@ -167,49 +221,35 @@ class Ui_mw_main(object):
 
         self.gridLayout.addWidget(self.le_sourceFile, 0, 1, 1, 8)
 
+        self.pb_srcBrowse = QPushButton(self.widget)
+        self.pb_srcBrowse.setObjectName(u"pb_srcBrowse")
+
+        self.gridLayout.addWidget(self.pb_srcBrowse, 0, 9, 1, 1)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer_2, 3, 7, 1, 1)
+
         self.label_5 = QLabel(self.widget)
         self.label_5.setObjectName(u"label_5")
+        self.label_5.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout.addWidget(self.label_5, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_5, 1, 6, 1, 1)
 
-        self.label_3 = QLabel(self.widget)
-        self.label_3.setObjectName(u"label_3")
+        self.line_2 = QFrame(self.widget)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.gridLayout.addWidget(self.label_3, 1, 6, 1, 1)
-
-        self.pb_outBrowse = QPushButton(self.widget)
-        self.pb_outBrowse.setObjectName(u"pb_outBrowse")
-
-        self.gridLayout.addWidget(self.pb_outBrowse, 2, 9, 1, 1)
-
-        self.line = QFrame(self.widget)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.Shape.HLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.gridLayout.addWidget(self.line, 3, 0, 1, 10)
+        self.gridLayout.addWidget(self.line_2, 2, 0, 1, 10)
 
 
         self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 5)
 
-        self.pb_quit = QPushButton(self.centralwidget)
-        self.pb_quit.setObjectName(u"pb_quit")
-        self.pb_quit.setMinimumSize(QSize(100, 0))
-
-        self.gridLayout_2.addWidget(self.pb_quit, 2, 2, 1, 1)
-
-        self.pb_go = QPushButton(self.centralwidget)
-        self.pb_go.setObjectName(u"pb_go")
-        sizePolicy.setHeightForWidth(self.pb_go.sizePolicy().hasHeightForWidth())
-        self.pb_go.setSizePolicy(sizePolicy)
-        self.pb_go.setMinimumSize(QSize(100, 0))
-
-        self.gridLayout_2.addWidget(self.pb_go, 2, 1, 1, 1)
-
         mw_main.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_main)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 700, 33))
+        self.menubar.setGeometry(QRect(0, 0, 753, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         mw_main.setMenuBar(self.menubar)
@@ -218,11 +258,8 @@ class Ui_mw_main(object):
         self.statusbar.setSizeGripEnabled(True)
         mw_main.setStatusBar(self.statusbar)
         QWidget.setTabOrder(self.le_sourceFile, self.pb_srcBrowse)
-        QWidget.setTabOrder(self.pb_srcBrowse, self.sb_index)
-        QWidget.setTabOrder(self.sb_index, self.cb_channels)
-        QWidget.setTabOrder(self.cb_channels, self.cb_grouping)
-        QWidget.setTabOrder(self.cb_grouping, self.ck_leadingZero)
-        QWidget.setTabOrder(self.ck_leadingZero, self.le_outputFile)
+        QWidget.setTabOrder(self.pb_srcBrowse, self.cb_grouping)
+        QWidget.setTabOrder(self.cb_grouping, self.le_outputFile)
         QWidget.setTabOrder(self.le_outputFile, self.pb_outBrowse)
         QWidget.setTabOrder(self.pb_outBrowse, self.pb_go)
         QWidget.setTabOrder(self.pb_go, self.pb_quit)
@@ -255,21 +292,14 @@ class Ui_mw_main(object):
         self.actionLight.setText(QCoreApplication.translate("mw_main", u"Light", None))
         self.actionDark.setText(QCoreApplication.translate("mw_main", u"Dark", None))
         self.actionSystem.setText(QCoreApplication.translate("mw_main", u"System", None))
-        self.label.setText(QCoreApplication.translate("mw_main", u"Source File", None))
-        self.cb_channels.setItemText(0, QCoreApplication.translate("mw_main", u"16", None))
-        self.cb_channels.setItemText(1, QCoreApplication.translate("mw_main", u"8", None))
-        self.cb_channels.setItemText(2, QCoreApplication.translate("mw_main", u"4", None))
-        self.cb_channels.setItemText(3, QCoreApplication.translate("mw_main", u"2", None))
-
 #if QT_CONFIG(tooltip)
-        self.label_4.setToolTip(QCoreApplication.translate("mw_main", u"Set how many audio channels are in the database.", None))
+        self.pb_go.setToolTip(QCoreApplication.translate("mw_main", u"Generate audio shuffling sources based on options set above.", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_4.setText(QCoreApplication.translate("mw_main", u"Audio Channels", None))
+        self.pb_go.setText(QCoreApplication.translate("mw_main", u"&Shuffle", None))
 #if QT_CONFIG(tooltip)
-        self.pb_srcBrowse.setToolTip(QCoreApplication.translate("mw_main", u"Find source file exported from Ultrix Sources table.", None))
+        self.pb_quit.setToolTip(QCoreApplication.translate("mw_main", u"Exit the application.", None))
 #endif // QT_CONFIG(tooltip)
-        self.pb_srcBrowse.setText(QCoreApplication.translate("mw_main", u"Browse", None))
-        self.label_2.setText(QCoreApplication.translate("mw_main", u"Output File", None))
+        self.pb_quit.setText(QCoreApplication.translate("mw_main", u"Quit", None))
         self.cb_grouping.setItemText(0, QCoreApplication.translate("mw_main", u"Mono", None))
         self.cb_grouping.setItemText(1, QCoreApplication.translate("mw_main", u"Stereo", None))
         self.cb_grouping.setItemText(2, QCoreApplication.translate("mw_main", u"Quad", None))
@@ -280,25 +310,33 @@ class Ui_mw_main(object):
 #endif // QT_CONFIG(tooltip)
         self.ck_leadingZero.setText(QCoreApplication.translate("mw_main", u"Leading Zero", None))
 #if QT_CONFIG(tooltip)
-        self.label_5.setToolTip(QCoreApplication.translate("mw_main", u"Set the index of the last source to use to generate audio sources.", None))
+        self.label_4.setToolTip(QCoreApplication.translate("mw_main", u"Set how many audio channels are in the database.", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_5.setText(QCoreApplication.translate("mw_main", u"End Index", None))
-#if QT_CONFIG(tooltip)
-        self.label_3.setToolTip(QCoreApplication.translate("mw_main", u"Set how you would like the audio to be grouped.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_3.setText(QCoreApplication.translate("mw_main", u"Audio Grouping", None))
+        self.label_4.setText(QCoreApplication.translate("mw_main", u"Channels", None))
+        self.label.setText(QCoreApplication.translate("mw_main", u"Source File", None))
 #if QT_CONFIG(tooltip)
         self.pb_outBrowse.setToolTip(QCoreApplication.translate("mw_main", u"Set or use autogenerated default file path for output file.", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_outBrowse.setText(QCoreApplication.translate("mw_main", u"Browse", None))
+        self.cb_channels.setItemText(0, QCoreApplication.translate("mw_main", u"16", None))
+        self.cb_channels.setItemText(1, QCoreApplication.translate("mw_main", u"8", None))
+        self.cb_channels.setItemText(2, QCoreApplication.translate("mw_main", u"4", None))
+        self.cb_channels.setItemText(3, QCoreApplication.translate("mw_main", u"2", None))
+
+        self.label_6.setText(QCoreApplication.translate("mw_main", u"Start Index", None))
 #if QT_CONFIG(tooltip)
-        self.pb_quit.setToolTip(QCoreApplication.translate("mw_main", u"Exit the application.", None))
+        self.label_3.setToolTip(QCoreApplication.translate("mw_main", u"Set how you would like the audio to be grouped.", None))
 #endif // QT_CONFIG(tooltip)
-        self.pb_quit.setText(QCoreApplication.translate("mw_main", u"Quit", None))
+        self.label_3.setText(QCoreApplication.translate("mw_main", u"Grouping", None))
+        self.label_2.setText(QCoreApplication.translate("mw_main", u"Output File", None))
 #if QT_CONFIG(tooltip)
-        self.pb_go.setToolTip(QCoreApplication.translate("mw_main", u"Generate audio shuffling sources based on options set above.", None))
+        self.pb_srcBrowse.setToolTip(QCoreApplication.translate("mw_main", u"Find source file exported from Ultrix Sources table.", None))
 #endif // QT_CONFIG(tooltip)
-        self.pb_go.setText(QCoreApplication.translate("mw_main", u"&Shuffle", None))
+        self.pb_srcBrowse.setText(QCoreApplication.translate("mw_main", u"Browse", None))
+#if QT_CONFIG(tooltip)
+        self.label_5.setToolTip(QCoreApplication.translate("mw_main", u"Set the index of the last source to use to generate audio sources.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_5.setText(QCoreApplication.translate("mw_main", u"End Index", None))
         self.menuFile.setTitle(QCoreApplication.translate("mw_main", u"&File", None))
     # retranslateUi
 
