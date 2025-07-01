@@ -143,7 +143,112 @@
        <property name="verticalSpacing">
         <number>0</number>
        </property>
-       <item row="3" column="6">
+       <item row="5" column="0" colspan="13">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QLabel" name="lb_start_index">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Start Index</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="11" colspan="2">
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="12">
+        <widget class="QPushButton" name="pb_srcBrowse">
+         <property name="toolTip">
+          <string>Find source file exported from Ultrix Sources table.</string>
+         </property>
+         <property name="text">
+          <string>Browse</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="9">
+        <widget class="QLabel" name="label_5">
+         <property name="toolTip">
+          <string>Set the index of the last source to use to generate audio sources.</string>
+         </property>
+         <property name="text">
+          <string>End Index</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="8">
+        <widget class="QLabel" name="label_3">
+         <property name="toolTip">
+          <string>Set how you would like the audio to be grouped.</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Grouping</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="label_4">
+         <property name="toolTip">
+          <string>Set how many audio channels are in the database.</string>
+         </property>
+         <property name="text">
+          <string>Channels</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Source File</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="9">
         <widget class="QComboBox" name="cb_grouping">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -185,139 +290,40 @@
          </item>
         </widget>
        </item>
+       <item row="1" column="8">
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1" colspan="11">
+        <widget class="QLineEdit" name="le_sourceFile">
+         <property name="clearButtonEnabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="10">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="3" column="4">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="8" colspan="2">
-        <spacer name="horizontalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="1" colspan="8">
-        <widget class="QLineEdit" name="le_outputFile"/>
-       </item>
-       <item row="1" column="4">
-        <widget class="QSpinBox" name="sb_start_index">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>50</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-         </property>
-         <property name="maximum">
-          <number>287</number>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="8">
-        <widget class="QCheckBox" name="ck_leadingZero">
-         <property name="toolTip">
-          <string>Check to enable leading zeroes on single digit numbers.</string>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LayoutDirection::RightToLeft</enum>
-         </property>
-         <property name="text">
-          <string>Leading Zero</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="label_4">
-         <property name="toolTip">
-          <string>Set how many audio channels are in the database.</string>
-         </property>
-         <property name="text">
-          <string>Channels</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Source File</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="7">
-        <widget class="QSpinBox" name="sb_end_index">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>50</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LayoutDirection::LeftToRight</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-         </property>
-         <property name="buttonSymbols">
-          <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
-         </property>
-         <property name="maximum">
-          <number>287</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="10">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="9">
-        <widget class="QPushButton" name="pb_outBrowse">
-         <property name="toolTip">
-          <string>Set or use autogenerated default file path for output file.</string>
-         </property>
-         <property name="text">
-          <string>Browse</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
         <widget class="QComboBox" name="cb_channels">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -365,54 +371,56 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="5">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+       <item row="3" column="11">
+        <widget class="QCheckBox" name="ck_leadingZero">
+         <property name="toolTip">
+          <string>Check to enable leading zeroes on single digit numbers.</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::RightToLeft</enum>
          </property>
-        </spacer>
-       </item>
-       <item row="1" column="3">
-        <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Start Index</string>
+          <string>Leading Zero</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="5">
-        <widget class="QLabel" name="label_3">
-         <property name="toolTip">
-          <string>Set how you would like the audio to be grouped.</string>
+       <item row="1" column="10">
+        <widget class="QSpinBox" name="sb_end_index">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
          </property>
          <property name="layoutDirection">
           <enum>Qt::LayoutDirection::LeftToRight</enum>
          </property>
-         <property name="text">
-          <string>Grouping</string>
-         </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
+         </property>
+         <property name="maximum">
+          <number>287</number>
+         </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="3">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+       <item row="4" column="12">
+        <widget class="QPushButton" name="pb_outBrowse">
+         <property name="toolTip">
+          <string>Set or use autogenerated default file path for output file.</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
+         <property name="text">
+          <string>Browse</string>
          </property>
-        </spacer>
+        </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_2">
@@ -424,25 +432,18 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="8">
-        <widget class="QLineEdit" name="le_sourceFile">
-         <property name="clearButtonEnabled">
-          <bool>false</bool>
+       <item row="2" column="0" colspan="13">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="0" column="9">
-        <widget class="QPushButton" name="pb_srcBrowse">
-         <property name="toolTip">
-          <string>Find source file exported from Ultrix Sources table.</string>
-         </property>
-         <property name="text">
-          <string>Browse</string>
-         </property>
-        </widget>
+       <item row="4" column="1" colspan="11">
+        <widget class="QLineEdit" name="le_outputFile"/>
        </item>
-       <item row="3" column="7">
-        <spacer name="horizontalSpacer_2">
+       <item row="3" column="5">
+        <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -454,23 +455,41 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="6">
-        <widget class="QLabel" name="label_5">
-         <property name="toolTip">
-          <string>Set the index of the last source to use to generate audio sources.</string>
+       <item row="1" column="5">
+        <widget class="QSpinBox" name="sb_start_index">
+         <property name="enabled">
+          <bool>false</bool>
          </property>
-         <property name="text">
-          <string>End Index</string>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
          </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>287</number>
+         </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="10">
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+       <item row="1" column="3">
+        <widget class="QCheckBox" name="ck_start_index">
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
@@ -589,7 +608,12 @@
  <tabstops>
   <tabstop>le_sourceFile</tabstop>
   <tabstop>pb_srcBrowse</tabstop>
+  <tabstop>ck_start_index</tabstop>
+  <tabstop>sb_start_index</tabstop>
+  <tabstop>sb_end_index</tabstop>
+  <tabstop>cb_channels</tabstop>
   <tabstop>cb_grouping</tabstop>
+  <tabstop>ck_leadingZero</tabstop>
   <tabstop>le_outputFile</tabstop>
   <tabstop>pb_outBrowse</tabstop>
   <tabstop>pb_go</tabstop>
