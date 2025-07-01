@@ -9,6 +9,7 @@ The GUI interface is pretty straightforward. It asks for a source file, an endin
 </p>
 
 - **Source List:** Enter or Browse to the file path of an Excel file that contains the data you wish to use. This is usually a direct export from Dashboard.
+- **Start Index:** Enter the index number from the ID column of the first source you want to use to generate audio sources. The box defaults to 0 (the first source) and can be enabled with the checkbox. The status bar at the bottom will tell you the source name associated with that index number.
 - **End Index:** Enter the index number from the ID column of the last source you want to use to generate audio sources. The status bar at the bottom will tell you the source name associated with that index number.
 - **Audio Channels:** Choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
 - **Audio Grouping:** Choose how you want the audio channels grouped (**Mono**, **Stereo**, **Quad**, or **Octo**)
