@@ -14,7 +14,8 @@ The GUI interface is pretty straightforward. It asks for a source file, an endin
 4. By default, audio shuffling will be generated with 16 channels of audio. If you would like to change that, use the **Channels** dropdown and choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
 5. By default, audio shuffling with use each channel as a discrete mono audio channel. If you would like to group channels, use the **Grouping** dropdown and choose how you want the audio channels grouped (**Mono**, **Stereo**, **Quad**, or **Octo**)
 6. Enable the **Leading Zeroes** checkbox if you want channel numbers 1-9 to be displayed with a leading zero (01-09)
-- The **Output File** field will automatically update based on the file name defined earlier in **Source File**. You can also manually enter or **Browse** to the file you wish the output to save as.
+7. The **Output File** field will automatically update based on the file name defined earlier in **Source File**. You can also manually enter or **Browse** to the file you wish the output to save as.
+8. Press the **Shuffle** button to generate the output Excel file at the path defined in **Output File**.
 
 -----
 
