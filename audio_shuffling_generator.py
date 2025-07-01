@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath("."))
 
 from pathlib import Path
 
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 from openpyxl import load_workbook, Workbook, worksheet
 
 from UI.main_window_ui import Ui_mw_main
@@ -39,8 +39,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.group_view.setExclusive(True)
+        self.settings = QtCore.QSettings("Anthony Thompson", "Ultrix Audio Shuffling Generator")
 
-        self.pb_srcBrowse.setFocus()
+        if self.settings.value("viewMode"):
+            self.set_color_scheme(self.settings.value("viewMode"))
+        else:
+            self.set_color_scheme("system")
 
         self.action_quit.triggered.connect(self.close)
         self.pb_quit.clicked.connect(self.close)
@@ -53,23 +58,43 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         self.sb_end_index.valueChanged.connect(self.get_last_source_name)
 
         self.action_open.triggered.connect(self.open_source_dialog)
+        self.action_light.triggered.connect(lambda: self.set_color_scheme("light"))
+        self.action_dark.triggered.connect(lambda: self.set_color_scheme("dark"))
+        self.action_system.triggered.connect(lambda: self.set_color_scheme("system"))
+
         self.pb_srcBrowse.clicked.connect(self.open_source_dialog)
         self.pb_outBrowse.clicked.connect(self.open_dest_dialog)
 
         self.action_shuffle.triggered.connect(self.process_file)
-        self.pb_go.clicked.connect(self.process_file)
+        self.pb_shuffle.clicked.connect(self.process_file)
 
+    @QtCore.Slot()
+    def set_color_scheme(self, choice):
+        if self.settings.value("viewMode") is not choice or not self.settings.value("viewMode"):
+            self.settings.setValue("viewMode", choice)
+        if choice == "light":
+            QtGui.QGuiApplication.styleHints().setColorScheme(QtCore.Qt.ColorScheme.Light)
+            self.action_light.setChecked(True)
+        elif choice == "dark":
+            QtGui.QGuiApplication.styleHints().setColorScheme(QtCore.Qt.ColorScheme.Dark)
+            self.action_dark.setChecked(True)
+        else:
+            QtGui.QGuiApplication.styleHints().setColorScheme(QtCore.Qt.ColorScheme.Unknown)
+            self.action_system.setChecked(True)
 
     @QtCore.Slot()
     def load_sheet(self, source_file):
         """ Slot attempts to load """
         self.wb = Workbook()
         self.ws = worksheet
+
         if source_file:
             try:
                 self.wb = load_workbook(source_file)
                 self.ws = self.wb["sources"]
-                self.sb_end_index.setMaximum(self.ws["A"][-1].value)
+                max_id = self.ws["A"][-1].value
+                self.sb_start_index.setMaximum(max_id)
+                self.sb_end_index.setMaximum(max_id)
             except Exception as e:
                 if type(e).__name__ == 'InvalidFileException':
                     self.show_status("File not found.")
@@ -114,10 +139,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
     def set_start_status(self):
         """ Enables or disables Start Index based on state of checkbox """
         if self.ck_start_index.isChecked():
-            self.lb_start_index.setEnabled(True)
+            # self.lb_start_index.setEnabled(True)
             self.sb_start_index.setEnabled(True)
         else:
-            self.lb_start_index.setEnabled(False)
+            # self.lb_start_index.setEnabled(False)
             self.sb_start_index.setEnabled(False)
 
     @QtCore.Slot()
