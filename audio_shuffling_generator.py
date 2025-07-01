@@ -48,7 +48,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         self.le_sourceFile.textChanged.connect(self.autofill_output)
         self.le_sourceFile.textChanged.connect(lambda: self.load_sheet(self.le_sourceFile.text()))
 
-        self.sb_index.valueChanged.connect(self.get_last_source_name)
+        self.sb_start_index.valueChanged.connect(self.get_first_source_name)
+        self.sb_end_index.valueChanged.connect(self.get_last_source_name)
 
         self.action_open.triggered.connect(self.open_source_dialog)
         self.pb_srcBrowse.clicked.connect(self.open_source_dialog)
@@ -67,7 +68,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             try:
                 self.wb = load_workbook(source_file)
                 self.ws = self.wb["sources"]
-                self.sb_index.setMaximum(self.ws["A"][-1].value)
+                self.sb_end_index.setMaximum(self.ws["A"][-1].value)
             except Exception as e:
                 if type(e).__name__ == 'InvalidFileException':
                     self.show_status("File not found.")
@@ -110,11 +111,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             self.le_outputFile.setText(str(path))
 
     @QtCore.Slot()
-    def get_last_source_name(self):
+    def get_first_source_name(self):
         """ Attempts to find the source name of the line matching the set index """
+        
+        if self.sb_start_index.value() > self.sb_end_index.value():
+            self.sb_end_index.setValue(self.sb_start_index.value())
+
         try:
             if self.le_sourceFile.text():
-                last_source = self.ws['B'][self.sb_index.value() + 1].value
+                first_source = self.ws['B'][self.sb_start_index.value() + 1].value
+                self.show_status(f"First source: {first_source}")
+        except TypeError:
+            self.show_status("Invalid index")
+        except IndexError:
+            self.show_status("Index out of range")
+
+    @QtCore.Slot()
+    def get_last_source_name(self):
+        """ Attempts to find the source name of the line matching the set index """
+        
+        if self.sb_start_index.value() > self.sb_end_index.value():
+            self.sb_start_index.setValue(self.sb_end_index.value())
+        
+        try:
+            if self.le_sourceFile.text():
+                last_source = self.ws['B'][self.sb_end_index.value() + 1].value
                 self.show_status(f"Last source: {last_source}")
         except TypeError:
             self.show_status("Invalid index")
@@ -126,10 +147,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         """ Processes files """
         source_file = self.le_sourceFile.text()
         output_file = self.le_outputFile.text()
-        end_id = self.sb_index.value()
+        start_id = self.sb_start_index.value()
+        end_id = self.sb_end_index.value()
         channels = int(self.cb_channels.currentText())
         grouping = self.cb_grouping.currentText()
         leading_zero = self.ck_leadingZero.isChecked()
+
+        # Make sure sheet is loaded
+        self.load_sheet(source_file)
 
         # Initialize lists
         names = []
@@ -148,7 +173,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             if not Path(source_file).exists():
                 raise FileNotFoundError()
 
-            for row in self.ws.iter_rows(min_row=2,
+            for row in self.ws.iter_rows(min_row=start_id + 2,
                                     max_row=end_id + 2,
                                     min_col=2,
                                     max_col=5,
