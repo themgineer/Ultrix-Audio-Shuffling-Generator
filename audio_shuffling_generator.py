@@ -10,13 +10,14 @@ from pathlib import Path
 
 from PySide6 import QtCore, QtWidgets, QtGui
 from openpyxl import load_workbook, Workbook, worksheet
+from openpyxl.utils import exceptions
 
 from UI.main_window_ui import Ui_mw_main
 
 try:
     from ctypes import windll  # Only exists on Windows.
 
-    MYAPPID = "themgineer.audio_shuffling_generator.0.0.6"
+    MYAPPID = "themgineer.audio_shuffling_generator.0.0.7"
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(MYAPPID)
 except ImportError:
     pass
@@ -95,9 +96,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
                 max_id = self.ws["A"][-1].value
                 self.sb_start_index.setMaximum(max_id)
                 self.sb_end_index.setMaximum(max_id)
-            except Exception as e:
-                if type(e).__name__ == 'InvalidFileException':
-                    self.show_status("File not found.")
+            except exceptions.InvalidFileException:
+                self.show_status(f"Cannot load file: {self.le_sourceFile.text()}")
+            except FileNotFoundError:
+                self.show_status(f"File not found: {self.le_sourceFile.text()}")
 
     @QtCore.Slot()
     def autofill_output(self):
@@ -115,7 +117,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self,
             "Select a File",
-            None,
+            "",
             "Excel Files (*.xlsx)"
         )
         if filename:
@@ -128,7 +130,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(
             self,
             "Select a File",
-            None,
+            "",
             "Excel Files (*.xlsx)"
         )
         if filename:
@@ -148,13 +150,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
     @QtCore.Slot()
     def get_first_source_name(self):
         """ Attempts to find the source name of the line matching the set index """
-        
+
         if self.sb_start_index.value() > self.sb_end_index.value():
             self.sb_end_index.setValue(self.sb_start_index.value())
 
         try:
             if self.le_sourceFile.text():
-                first_source = self.ws['B'][self.sb_start_index.value() + 1].value
+                first_source = self.ws['B'][self.sb_start_index.value() + 1].value # type: ignore
                 self.show_status(f"First source: {first_source}")
         except TypeError:
             self.show_status("Invalid index")
@@ -164,13 +166,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
     @QtCore.Slot()
     def get_last_source_name(self):
         """ Attempts to find the source name of the line matching the set index """
-        
+
         if self.sb_start_index.value() > self.sb_end_index.value():
             self.sb_start_index.setValue(self.sb_end_index.value())
-        
+
         try:
             if self.le_sourceFile.text():
-                last_source = self.ws['B'][self.sb_end_index.value() + 1].value
+                last_source = self.ws['B'][self.sb_end_index.value() + 1].value # type: ignore
                 self.show_status(f"Last source: {last_source}")
         except TypeError:
             self.show_status("Invalid index")
@@ -208,15 +210,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             if not Path(source_file).exists():
                 raise FileNotFoundError()
 
-            for row in self.ws.iter_rows(min_row=start_id + 2,
+            for row in self.ws.iter_rows(min_row=start_id + 2, # type: ignore
                                     max_row=end_id + 2,
                                     min_col=2,
                                     max_col=5,
                                     values_only = True):
                 names.append(row[0])
-                ports.append(row[3][:-8])
+                ports.append(row[3][:-8]) # type: ignore
 
-            starting_index = self.ws['A'][-1].value + 1
+            starting_index = self.ws['A'][-1].value + 1 # type: ignore
 
             shuffled_names = self.process_names(names, channels, group_step, leading_zero)
             shuffled_ports = self.process_ports(ports, channels, group_step)
@@ -224,7 +226,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             new_rows = self.create_new_rows(shuffled_names, shuffled_ports, starting_index)
 
             for row in new_rows:
-                self.ws.append(row)
+                self.ws.append(row) # type: ignore
 
             self.wb.save(output_file)
 
@@ -270,7 +272,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
                         output.append(f"{i} CH{j}-{j+(group_step - 1)}")
 
         return output
-    
+
     def process_ports(self, ports, channels, group_step):
         """ Creates a list of lists with channel ports """
 
