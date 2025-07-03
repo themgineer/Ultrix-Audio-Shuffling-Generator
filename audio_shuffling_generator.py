@@ -17,7 +17,7 @@ from UI.main_window_ui import Ui_mw_main
 try:
     from ctypes import windll  # Only exists on Windows.
 
-    MYAPPID = "themgineer.audio_shuffling_generator.0.0.7"
+    MYAPPID = "themgineer.audio_shuffling_generator.0.0.8"
     windll.shell32.SetCurrentProcessExplicitAppUserModelID(MYAPPID)
 except ImportError:
     pass
