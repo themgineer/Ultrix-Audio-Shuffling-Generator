@@ -66,12 +66,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         self.pb_srcBrowse.clicked.connect(self.open_source_dialog)
         self.pb_outBrowse.clicked.connect(self.open_dest_dialog)
 
+        self.action_guess.triggered.connect(self.guess_end_id)
+
         self.action_shuffle.triggered.connect(self.process_file)
         self.pb_shuffle.clicked.connect(self.process_file)
 
     @QtCore.Slot()
     def set_color_scheme(self, choice):
-        if self.settings.value("viewMode") is not choice or not self.settings.value("viewMode"):
+        if self.settings.value("viewMode") is not choice:
             self.settings.setValue("viewMode", choice)
         if choice == "light":
             QtGui.QGuiApplication.styleHints().setColorScheme(QtCore.Qt.ColorScheme.Light)
@@ -90,6 +92,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         self.ws = worksheet
 
         if source_file:
+            source_path = Path(source_file)
             try:
                 self.wb = load_workbook(source_file)
                 self.ws = self.wb["sources"]
@@ -97,9 +100,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
                 self.sb_start_index.setMaximum(max_id)
                 self.sb_end_index.setMaximum(max_id)
             except exceptions.InvalidFileException:
-                self.show_status(f"Cannot load file: {self.le_sourceFile.text()}")
+                self.show_status(f"Cannot load file: {source_path.name}")
             except FileNotFoundError:
-                self.show_status(f"File not found: {self.le_sourceFile.text()}")
+                self.show_status(f"File not found: {source_path.name}")
 
     @QtCore.Slot()
     def autofill_output(self):
@@ -107,9 +110,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         if self.le_sourceFile.text() == "":
             self.le_outputFile.setText("")
         else:
-            path_list = self.le_sourceFile.text().split("/")
-            path_list[-1] = f"{path_list[-1].split('.')[0]}_shuffled.xlsx"
-            self.le_outputFile.setText("/".join(path_list))
+            source_path = Path(self.le_sourceFile.text())
+            source_folder = source_path.parent
+            file_name = source_path.stem
+            file_ext = source_path.suffix
+            output_path = Path.joinpath(source_folder, file_name + "_shuffled" + file_ext)
+            self.le_outputFile.setText(str(output_path))
 
     @QtCore.Slot()
     def open_source_dialog(self):
@@ -139,12 +145,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     @QtCore.Slot()
     def set_start_status(self):
-        """ Enables or disables Start Index based on state of checkbox """
+        """ Enables or disables Start Index spinbox based on state of checkbox """
         if self.ck_start_index.isChecked():
-            # self.lb_start_index.setEnabled(True)
             self.sb_start_index.setEnabled(True)
         else:
-            # self.lb_start_index.setEnabled(False)
             self.sb_start_index.setEnabled(False)
 
     @QtCore.Slot()
@@ -190,9 +194,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         grouping = self.cb_grouping.currentText()
         leading_zero = self.ck_leadingZero.isChecked()
 
-        # Make sure sheet is loaded
-        self.load_sheet(source_file)
-
         # Initialize lists
         names = []
         ports = []
@@ -201,6 +202,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         group_step = min(group_dict[grouping], channels)
 
         try:
+            # Make sure sheet is loaded
+            self.load_sheet(source_file)
+
             if source_file == "" or source_file is None:
                 raise InputEmpty()
 
@@ -228,6 +232,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             for row in new_rows:
                 self.ws.append(row) # type: ignore
 
+            # Checks to see if the Move Disconnect action is checked
+            if self.action_move_disc.isChecked():
+                self.move_disconnect()
+
             self.wb.save(output_file)
 
             message = "Output Successful!"
@@ -237,7 +245,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         except OutputEmpty:
             message = "Output file not defined."
         except FileNotFoundError:
-            message = "Input file not found."
+            message = "Cannot find input file not found."
         except PermissionError:
             message = "Permission Denied: Excel file may still be open."
         except UnknownError:
@@ -246,6 +254,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
             message = "Unknown error with input file."
 
         self.show_status(message)
+
+    QtCore.Slot()
+    def guess_end_id(self):
+        try:
+            for row in self.ws.iter_rows(min_row=self.ws.min_row + 1, max_row=self.ws.max_row, max_col=self.ws.max_column):
+                if type(row[5].value) is type(None) or "DANTE" in row[1].value.upper() or "MADI" in row[1].value.upper():
+                    break
+
+                last_source_row = row[0].value
+            
+            self.sb_end_index.setValue(last_source_row)
+        except AttributeError:
+            self.show_status("Cannot find rows in file. Is a valid file loaded?")
 
     def process_names(self, names, channels, group_step, leading_zero):
         """ Creates a list of names with channel numbers appended """
@@ -300,8 +321,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         return output
 
     def show_status(self, message):
-        """ Simple function to update status bar message """
+        """ Updates status bar message """
         self.statusbar.showMessage(message, timeout=5000)
+    
+    def move_disconnect(self):
+        """ Finds the first instance of a row containing "DISC" in the name and moves it to the bottom of the sheet
+            It then renumbers the sheet to make sure the ID numbers are sequential """
+        for row in self.ws.iter_rows(min_row=self.ws.min_row + 1, max_row=self.ws.max_row, max_col=self.ws.max_column):
+            if "DISC" in row[1].value.upper():
+                disc_row = row
+                break
+
+        self.ws.delete_rows(disc_row[0].row)
+        self.ws.append(disc_row)
+
+        for row in self.ws.iter_rows(min_row=self.ws.min_row + 1, max_row=self.ws.max_row, max_col=1):
+            row[0].value = row[0].row - 2
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
