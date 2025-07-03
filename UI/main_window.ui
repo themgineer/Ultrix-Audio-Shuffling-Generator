@@ -111,6 +111,12 @@
          <string/>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <property name="leftMargin">
+          <number>30</number>
+         </property>
+         <property name="rightMargin">
+          <number>30</number>
+         </property>
          <item>
           <widget class="QCheckBox" name="ck_start_index">
            <property name="enabled">
@@ -283,7 +289,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
+             <width>10</width>
              <height>20</height>
             </size>
            </property>
@@ -333,7 +339,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
+             <width>10</width>
              <height>20</height>
             </size>
            </property>
@@ -433,7 +439,7 @@
      <x>0</x>
      <y>0</y>
      <width>776</width>
-     <height>33</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -458,7 +464,20 @@
     <addaction name="action_dark"/>
     <addaction name="action_system"/>
    </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>&amp;Options</string>
+    </property>
+    <addaction name="action_guess"/>
+    <addaction name="action_move_disc"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuOptions"/>
    <addaction name="menuView"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
@@ -551,6 +570,25 @@
     <font>
      <pointsize>10</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="action_move_disc">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Move Disconnect</string>
+   </property>
+   <property name="toolTip">
+    <string>Will move Disconnect source to bottom of sheet</string>
+   </property>
+  </action>
+  <action name="action_guess">
+   <property name="text">
+    <string>&amp;Guess End ID</string>
+   </property>
+   <property name="toolTip">
+    <string>Will try to find the End ID automatically</string>
    </property>
   </action>
   <actiongroup name="group_view">

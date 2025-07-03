@@ -65,6 +65,11 @@ class Ui_mw_main(object):
         self.actionSystem.setCheckable(True)
         self.actionSystem.setChecked(True)
         self.actionSystem.setFont(font)
+        self.action_move_disc = QAction(mw_main)
+        self.action_move_disc.setObjectName(u"action_move_disc")
+        self.action_move_disc.setCheckable(True)
+        self.action_guess = QAction(mw_main)
+        self.action_guess.setObjectName(u"action_guess")
         self.group_view = QActionGroup(mw_main)
         self.group_view.setObjectName(u"group_view")
         self.action_light = QAction(self.group_view)
@@ -116,6 +121,7 @@ class Ui_mw_main(object):
         self.groupBox_3.setMinimumSize(QSize(0, 45))
         self.horizontalLayout_6 = QHBoxLayout(self.groupBox_3)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.horizontalLayout_6.setContentsMargins(30, -1, 30, -1)
         self.ck_start_index = QCheckBox(self.groupBox_3)
         self.ck_start_index.setObjectName(u"ck_start_index")
         self.ck_start_index.setEnabled(True)
@@ -185,7 +191,7 @@ class Ui_mw_main(object):
 
         self.horizontalLayout_7.addWidget(self.cb_channels)
 
-        self.horizontalSpacer_6 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_7.addItem(self.horizontalSpacer_6)
 
@@ -203,7 +209,7 @@ class Ui_mw_main(object):
 
         self.horizontalLayout_7.addWidget(self.cb_grouping)
 
-        self.horizontalSpacer_7 = QSpacerItem(20, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_7 = QSpacerItem(10, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_7.addItem(self.horizontalSpacer_7)
 
@@ -268,12 +274,15 @@ class Ui_mw_main(object):
         mw_main.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(mw_main)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 776, 33))
+        self.menubar.setGeometry(QRect(0, 0, 776, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuView = QMenu(self.menubar)
         self.menuView.setObjectName(u"menuView")
         self.menuView.setFont(font)
+        self.menuOptions = QMenu(self.menubar)
+        self.menuOptions.setObjectName(u"menuOptions")
+        self.menuOptions.setFont(font)
         mw_main.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(mw_main)
         self.statusbar.setObjectName(u"statusbar")
@@ -287,6 +296,7 @@ class Ui_mw_main(object):
         QWidget.setTabOrder(self.pb_shuffle, self.pb_quit)
 
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuView.menuAction())
         self.menuFile.addAction(self.action_open)
         self.menuFile.addAction(self.action_shuffle)
@@ -295,6 +305,8 @@ class Ui_mw_main(object):
         self.menuView.addAction(self.action_light)
         self.menuView.addAction(self.action_dark)
         self.menuView.addAction(self.action_system)
+        self.menuOptions.addAction(self.action_guess)
+        self.menuOptions.addAction(self.action_move_disc)
 
         self.retranslateUi(mw_main)
 
@@ -318,6 +330,14 @@ class Ui_mw_main(object):
         self.actionLight.setText(QCoreApplication.translate("mw_main", u"Light", None))
         self.actionDark.setText(QCoreApplication.translate("mw_main", u"Dark", None))
         self.actionSystem.setText(QCoreApplication.translate("mw_main", u"System", None))
+        self.action_move_disc.setText(QCoreApplication.translate("mw_main", u"&Move Disconnect", None))
+#if QT_CONFIG(tooltip)
+        self.action_move_disc.setToolTip(QCoreApplication.translate("mw_main", u"Will move Disconnect source to bottom of sheet", None))
+#endif // QT_CONFIG(tooltip)
+        self.action_guess.setText(QCoreApplication.translate("mw_main", u"&Guess End ID", None))
+#if QT_CONFIG(tooltip)
+        self.action_guess.setToolTip(QCoreApplication.translate("mw_main", u"Will try to find the End ID automatically", None))
+#endif // QT_CONFIG(tooltip)
         self.action_light.setText(QCoreApplication.translate("mw_main", u"&Light", None))
         self.action_dark.setText(QCoreApplication.translate("mw_main", u"&Dark", None))
         self.action_system.setText(QCoreApplication.translate("mw_main", u"&System", None))
@@ -373,5 +393,6 @@ class Ui_mw_main(object):
         self.pb_quit.setText(QCoreApplication.translate("mw_main", u"&Quit", None))
         self.menuFile.setTitle(QCoreApplication.translate("mw_main", u"&File", None))
         self.menuView.setTitle(QCoreApplication.translate("mw_main", u"&View", None))
+        self.menuOptions.setTitle(QCoreApplication.translate("mw_main", u"&Options", None))
     # retranslateUi
 
