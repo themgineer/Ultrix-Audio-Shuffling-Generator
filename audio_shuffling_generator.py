@@ -87,7 +87,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
     @QtCore.Slot()
     def load_sheet(self, source_file):
-        """ Slot attempts to load """
+        """ Slot attempts to load worksheet from source file """
+
         self.wb = Workbook()
         self.ws = worksheet
 
@@ -202,8 +203,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         group_step = min(group_dict[grouping], channels)
 
         try:
-            # Make sure sheet is loaded
-            self.load_sheet(source_file)
 
             if source_file == "" or source_file is None:
                 raise InputEmpty()
@@ -213,6 +212,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
 
             if not Path(source_file).exists():
                 raise FileNotFoundError()
+
+            # Make sure sheet is loaded
+            self.load_sheet(source_file)
 
             for row in self.ws.iter_rows(min_row=start_id + 2, # type: ignore
                                     max_row=end_id + 2,
@@ -245,7 +247,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
         except OutputEmpty:
             message = "Output file not defined."
         except FileNotFoundError:
-            message = "Cannot find input file not found."
+            message = f"File not found: {Path(source_file).name}"
         except PermissionError:
             message = "Permission Denied: Excel file may still be open."
         except UnknownError:
