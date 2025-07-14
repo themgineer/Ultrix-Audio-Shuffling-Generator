@@ -8,14 +8,28 @@ The GUI interface is pretty straightforward. It asks for a source file, an endin
   <img src="readme_resources/screenshot.png" alt="Screenshot of the interface."/>
 </p>
 
-1. Use the **Source File** field to enter or **Browse** to the file path of an Excel file that contains the data you wish to use. Usually, this should be a direct export from Dashboard.
+### Operation
+1. Use the **Source File** field to enter or **Browse** to the file path of an Excel file that contains the data you wish to use. This should be a direct export from the Sources page for the Ultrix or BCS in Dashboard.
 2. If you wish to start at a source other than the first source, enable the **Start ID** checkbox and enter the number from the ID column of the source you want to start using to generate audio sources. The status bar at the bottom will tell you the source name associated with that index number.
 3. Choose the last source by entering the **End ID** value of the last source you want to use to generate audio sources. The status bar at the bottom will tell you the source name associated with that index number.
 4. By default, audio shuffling will be generated with 16 channels of audio. If you would like to change that, use the **Channels** dropdown and choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
 5. By default, audio shuffling with use each channel as a discrete mono audio channel. If you would like to group channels, use the **Grouping** dropdown and choose how you want the audio channels grouped (**Mono**, **Stereo**, **Quad**, or **Octo**)
 6. Enable the **Leading Zeroes** checkbox if you want channel numbers 1-9 to be displayed with a leading zero (01-09)
-7. The **Output File** field will automatically update based on the file name defined earlier in **Source File**. You can also manually enter or **Browse** to the file you wish the output to save as.
+7. The **Output File** field will automatically update based on the file name defined earlier in **Source File**. You can also manually enter or **Browse** to the file you wish the output to save as. If the chosen file already exists, it will be overwritten. If the chosen file does not exist, it will be created.
 8. Press the **Shuffle** button to generate the output Excel file at the path defined in **Output File**.
+
+### Menus
+- **File**
+  - **Open**: Opens a source file
+  - **Shuffle**: Functions the same as clicking the **Shuffle** button 
+  - **Quit**: Exits the application
+- **Options**
+  - **Guess End ID**: Attempts to find the most logical End ID based on either naming or audio levels
+  - **Move Disconnect**: If there is a Disconnect source in your sources table, it will attempt to move the source to the bottom of the table after creating the shuffling sources.
+- **View**:
+  - **Light**: Sets the interface to light mode, regardless of OS setting
+  - **Dark**: Sets the interface to dark mode, regardless of OS setting
+  - **System**: Follows the mode set in the operating system
 
 -----
 
