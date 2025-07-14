@@ -98,12 +98,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
                 self.wb = load_workbook(source_file)
                 self.ws = self.wb["sources"]
                 max_id = self.ws["A"][-1].value
-                self.sb_start_index.setMaximum(max_id)
-                self.sb_end_index.setMaximum(max_id)
+                if type(max_id) is int:
+                    self.sb_start_index.setMaximum(max_id)
+                    self.sb_end_index.setMaximum(max_id)
+                else:
+                    raise TypeError
+                self.show_status(f"Successfully loaded file: {source_path.name}")
             except exceptions.InvalidFileException:
                 self.show_status(f"Cannot load file: {source_path.name}")
             except FileNotFoundError:
                 self.show_status(f"File not found: {source_path.name}")
+            except KeyError:
+                self.show_status(f"{source_path.name} does not have a 'sources' worksheet.")
+                self.le_sourceFile.clear()
+            except TypeError:
+                self.show_status(f"{source_path.name} does not appear to have any valid data")
+                self.le_sourceFile.clear()
 
     @QtCore.Slot()
     def autofill_output(self):
@@ -329,16 +339,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
     def move_disconnect(self):
         """ Finds the first instance of a row containing "DISC" in the name and moves it to the bottom of the sheet
             It then renumbers the sheet to make sure the ID numbers are sequential """
+        disc_row = None
+        
         for row in self.ws.iter_rows(min_row=self.ws.min_row + 1, max_row=self.ws.max_row, max_col=self.ws.max_column):
             if "DISC" in row[1].value.upper():
                 disc_row = row
                 break
 
-        self.ws.delete_rows(disc_row[0].row)
-        self.ws.append(disc_row)
+        if disc_row:
+            self.ws.delete_rows(disc_row[0].row)
+            self.ws.append(disc_row)
 
-        for row in self.ws.iter_rows(min_row=self.ws.min_row + 1, max_row=self.ws.max_row, max_col=1):
-            row[0].value = row[0].row - 2
+            for row in self.ws.iter_rows(min_row=self.ws.min_row + 1, max_row=self.ws.max_row, max_col=1):
+                row[0].value = row[0].row - 2
 
 
 if __name__ == "__main__":
