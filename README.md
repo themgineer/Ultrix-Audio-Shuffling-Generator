@@ -1,92 +1,38 @@
 # **Audio Shuffling Generator for Ultrix Database**
 
-This is a short, simple script that will take a list of source names and output a CSV containing corresponding audio shuffling labels.
+This is a small application that will take an Excel export from Ross Video Ultrix or Ultricore BCS Sources tables and append audio shuffling sources.
 
-The GUI interface is pretty simple. It asks for a source list filename, a number of audio channels, how you want your audio grouped, and an output filename. Once all of those are provided, just hit the `Go` button and it should provide a CSV file depending on the data structure of the input file. More on that below.
+The GUI interface is pretty straightforward. It asks for a source file, an ending index number, a number of audio channels, how you want your audio grouped, and an output filename. Once all of those are provided, just hit the **Shuffle** button and it should generate an Excel file that can be directly imported back into the **Sources** table in Dashboard.
 
 <p align="center">
-  <img src="readme_resources/ui_tkinter.png" alt="Screenshot of Audio Shuffle interface."/>
+  <img src="readme_resources/screenshot.png" alt="Screenshot of the interface."/>
 </p>
 
-- **Source List:** Enter or Browse to the file path of a txt or csv file that contains the data you wish to use.
-- **Audio Channels:** Choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
-- **Audio Grouping:** Choose how you want the audio channels grouped (**Mono**, **Stereo**, **Quad**, or **Octo**)
-- **Leading Zeroes** Decide if you want channel numbers 1-9 to be displayed with a leading zero (01-09)
-- **Output File:** Enter or Browse to the file path you wish your output csv file to have. This field will automatically update based on the file path entered in the **Source List** field.
+### Operation
+1. Use the **Source File** field to enter or **Browse** to the file path of an Excel file that contains the data you wish to use. This should be a direct export from the Sources page for the Ultrix or BCS in Dashboard.
+2. If you wish to start at a source other than the first source, enable the **Start ID** checkbox and enter the number from the ID column of the source you want to start using to generate audio sources. The status bar at the bottom will tell you the source name associated with that index number.
+3. Choose the last source by entering the **End ID** value of the last source you want to use to generate audio sources. The status bar at the bottom will tell you the source name associated with that index number.
+4. By default, audio shuffling will be generated with 16 channels of audio. If you would like to change that, use the **Channels** dropdown and choose the number of audio levels in your database (**2**, **4**, **8**, or **16**).
+5. By default, audio shuffling with use each channel as a discrete mono audio channel. If you would like to group channels, use the **Grouping** dropdown and choose how you want the audio channels grouped (**Mono**, **Stereo**, **Quad**, or **Octo**)
+6. Enable the **Leading Zeroes** checkbox if you want channel numbers 1-9 to be displayed with a leading zero (01-09)
+7. The **Output File** field will automatically update based on the file name defined earlier in **Source File**. You can also manually enter or **Browse** to the file you wish the output to save as. If the chosen file already exists, it will be overwritten. If the chosen file does not exist, it will be created.
+8. Press the **Shuffle** button to generate the output Excel file at the path defined in **Output File**.
+
+### Menus
+- **File**
+  - **Open**: Opens a source file
+  - **Shuffle**: Functions the same as clicking the **Shuffle** button 
+  - **Quit**: Exits the application
+- **Options**
+  - **Guess End ID**: Attempts to find the most logical End ID based on either naming or audio levels
+  - **Move Disconnect**: If there is a Disconnect source in your sources table, it will attempt to move the source to the bottom of the table after creating the shuffling sources.
+- **View**:
+  - **Light**: Sets the interface to light mode, regardless of OS setting
+  - **Dark**: Sets the interface to dark mode, regardless of OS setting
+  - **System**: Follows the mode set in the operating system
 
 -----
 
 ## **Input Data Structure**
 
-Data can be input as a list of sources as a txt file or a table of source names and input ports as a csv. Follow the below structures to ensure consistent output.
-
-### *List Input*
-
-If you have a list of input names, you can just put each name on a new line in a standard text file. The script will then output a csv of those names appended with audio channels numbers. If your list contains blank lines or lines beginning with a `#`, those will be ignored.
-
-Input File:
-
-```txt
-Source 1
-Source 2
-Source 3
-Source 4
-```
-
-Output File:
-
-```csv
-Source 1 CH01
-Source 1 CH02
-Source 1 CH03
-Source 1 CH04
-Source 1 CH05
-...
-...
-...
-Source 4 CH11
-Source 4 CH12
-Source 4 CH13
-Source 4 CH14
-Source 4 CH15
-Source 4 CH16
-```
-
-### *CSV Input*
-
-The CSV input will take a source name and an Ultrix input in the format `name.slotnumber.in[input number]`. For example: `Ultrix.slot1.in[1]`. The script will then create an output file that closely matches the layout of an Ultrix database.
-
-Notice that the CSV input does NOT include the Ultrix channel information in the list (`.sdi.ch1` or `.audio.ch1`). This is done to maintain consistency and simplicity. The script only needs to know what input on what slot to use.
-
-If your CSV input file includes a header, it will not be treated as a header. It will be processed the same as any other line.
-
-**This script assumes you have not changed your port labels from their default values.**
-
-Input File:
-
-```csv
-Source 1,Ultrix.slot1.in[1]
-Source 2,Ultrix.slot1.in[2]
-Source 3,Ultrix.slot1.in[3]
-Source 4,Ultrix.slot1.in[4]
-```
-
-Output File:
-
-```csv
-Name,Description,Video,Audio 1,Audio 2,Audio 3,Audio 4,Audio 5,Audio 6,Audio 7,Audio 8,Audio 9,Audio 10,Audio 11,Audio 12,Audio 13,Audio 14,Audio 15,Audio 16
-Source 1 CH01,,,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1,Ultrix.slot1.in[1].audio.ch1
-Source 1 CH02,,,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2,Ultrix.slot1.in[1].audio.ch2
-Source 1 CH03,,,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3,Ultrix.slot1.in[1].audio.ch3
-Source 1 CH04,,,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4,Ultrix.slot1.in[1].audio.ch4
-Source 1 CH05,,,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5,Ultrix.slot1.in[1].audio.ch5
-...
-...
-...
-Source 4 CH11,,,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11,Ultrix.slot1.in[4].audio.ch11
-Source 4 CH12,,,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12,Ultrix.slot1.in[4].audio.ch12
-Source 4 CH13,,,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13,Ultrix.slot1.in[4].audio.ch13
-Source 4 CH14,,,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14,Ultrix.slot1.in[4].audio.ch14
-Source 4 CH15,,,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15,Ultrix.slot1.in[4].audio.ch15
-Source 4 CH16,,,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16,Ultrix.slot1.in[4].audio.ch16
-```
+The source file is intended to be an Excel file exported from the Sources table of a Ross Video Ultrix or Ultricore BCS. The application expects a *sources* worksheet and the internal data to follow the form generated by the export.
