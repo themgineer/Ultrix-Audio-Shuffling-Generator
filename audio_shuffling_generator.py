@@ -271,7 +271,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_mw_main):
     def guess_end_id(self):
         try:
             for row in self.ws.iter_rows(min_row=self.ws.min_row + 1, max_row=self.ws.max_row, max_col=self.ws.max_column):
-                if type(row[5].value) is type(None) or "DANTE" in row[1].value.upper() or "MADI" in row[1].value.upper():
+                if type(row[5].value) is type(None) or "DANTE" in row[1].value.upper() or "MADI" in row[1].value.upper() or "DISC" in row[1].value.upper():
                     break
 
                 last_source_row = row[0].value
